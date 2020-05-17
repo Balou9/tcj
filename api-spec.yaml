@@ -1,0 +1,82 @@
+openapi: 3.0.0
+info:
+  title: API Gateway REST API
+  version: 0.0.1
+# servers:
+#   - url: http://api.example.com/v1
+#     description: Main (production)
+paths:
+  /gas-station:
+    get:
+      summary: Returns a list of all gas stations # revenue?
+      responses:
+        '200':
+          description: A JSON Object containing all gas stations
+          content:
+            application/json:
+              schema:
+                type: json
+                items:
+                  type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: json
+                items:
+                  type: string
+  /gas-station/{id}:
+    get:
+      summary: Returns gas station by id # revenue?
+      # description: Optional extended description in CommonMark or HTML
+      responses:
+        200:
+          description: A JSON Object containing specific gas station # revenue?
+          content:
+            application/json:
+              schema:
+                type: json
+                items:
+                  type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: json
+                items:
+                  type: string
+  /gas-station:
+    post:
+      summary: Add a new gas station to the database # revenue?
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          # description: List properties
+          schema:
+            type: object
+            required:
+              - userName
+            properties:
+              id:
+                type: string
+              gasStationName:
+                type: string
+              gasStationLocation:
+                type: string
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+             schema:
+               type: json
+        400:
+          description: Bad Request
+          content:
+            application/json:
+             schema:
+               type: json
