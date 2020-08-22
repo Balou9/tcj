@@ -78,3 +78,32 @@ jobs:
               GetProfileHandlerName=${{ env._GET_PROFILE_HANDLER_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
+
+
+  test:
+    runs-on: ubuntu-latest
+    needs:
+      - validate
+      - deploy
+    steps:
+      - uses: actions/checkout@v2.3.1
+
+      - uses: aws-actions/configure-aws-credentials@v1.4.2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: fetch stack outputs
+        run: |
+          api_base_url="$( \
+            aws cloudformation describe-stacks \
+              --stack-name="${{ needs.deploy.outputs._stack_name }}" \
+              --query="Stacks[0].Outputs[?OutputKey=='ApiBaseURL'].OutputValue" \
+              --output=text \
+          )"
+          echo "::set-env name=_BASE_URL::$api_base_url"
+      - name: api testing
+        run: |
+          source ./test/test_spec.sh
+          test_profile_get_200

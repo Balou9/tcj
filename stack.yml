@@ -113,7 +113,7 @@ Resources:
     Properties:
       Code:
         ZipFile: |
-          exports.handler = async function () {
+          exports.handler = function () {
             var response = JSON.stringify({body: "Hello World!"})
             return response
           }
