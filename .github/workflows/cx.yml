@@ -2,6 +2,9 @@ name: cx
 
 on: push
 
+env:
+  AWS_REGION: us-east-1
+
 jobs:
   validate:
     runs-on: ubuntu-latest
