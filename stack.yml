@@ -24,7 +24,7 @@ Parameters:
     AllowedPattern: "^v[0-9]+$"
     Type: String
 
-  AccessLogRetentionDays:
+  AccessLogRetentionInDays:
     Description: API access log retention in days
     Type: Number
     Default: 7
