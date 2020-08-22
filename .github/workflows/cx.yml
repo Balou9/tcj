@@ -105,5 +105,5 @@ jobs:
           echo "::set-env name=_BASE_URL::$api_base_url"
       - name: api testing
         run: |
-          source ./test/test_spec.sh
+          source ./test/api_test.sh
           test_profile_get_200
