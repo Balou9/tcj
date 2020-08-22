@@ -1,0 +1,67 @@
+openapi: 3.0.3
+info:
+  title: chale API definition
+  version: 0.0.1
+paths:
+  /profile/{id}:
+    post:
+      summary: Create chale profile
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: "#/components/schemas/Uuid"
+          required: true
+          description: uuid of the profile to be updated
+      responses:
+        202:
+          description: accepted
+        400:
+          description: bad request
+        401:
+          description: unauthorized
+        500:
+          description: internal server error
+    put:
+      summary: update a profile
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: "#/components/schemas/Uuid"
+          required: true
+          description: uuid of the profile to be updated
+      responses:
+        201:
+          description: updated
+        400:
+          description: bad request
+        401:
+          description: unauthorized
+        404:
+          description: not found
+        500:
+          description: internal server error
+    get:
+      summary: get profile information
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: "#/components/schemas/Uuid"
+          required: true
+          description: uuid of the profile
+      responses:
+        200:
+          description: ok
+        400:
+          description: bad request
+        401:
+          description: unauthorized
+        500:
+          description: internal server error
+components:
+  schemas:
+    Uuid:
+      type: string
+      pattern: "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89AB][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$"
