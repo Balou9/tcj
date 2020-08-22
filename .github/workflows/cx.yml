@@ -44,7 +44,7 @@ jobs:
       - name: map branch 2 test/prod
         run: |
           if [[ ${{ github.ref }} == *master ]]; then
-            echo ::set-env name=_ENVIRONMENT::prod
+            echo ::set-env name=_ENVIRONMENT::test
           else
             echo ::set-env name=_ENVIRONMENT::test
           fi
