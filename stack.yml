@@ -12,7 +12,7 @@ Metadata:
           default: API
         Parameters:
           - ApiStageName
-          - AccessLogRetentionDays
+          - AccessLogRetentionInDays
           - FunctionMemorySize
           - FunctionTimeout
           - FunctionLogRetentionInDays
