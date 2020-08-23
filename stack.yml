@@ -114,8 +114,13 @@ Resources:
       Code:
         ZipFile: |
           exports.handler = function () {
-            var response = JSON.stringify({body: "Hello World!"})
-            return response
+            var profile = "chale!!!!!"
+
+            return {
+              StatusCode: 200,
+              Headers: { "Content-Type": "application/json" },
+              Body: JSON.stringify(profile)
+            }
           }
       Runtime: nodejs12.x
       Handler: index.handler
