@@ -114,13 +114,15 @@ Resources:
       Code:
         ZipFile: |
           exports.handler = function(event) {
-            return {
+            var response =  {
               "statusCode": 200,
               "headers": {
                 "Content-Type": "application/json"
                 },
               "body": JSON.stringify("chale")
             }
+
+            return response
           }
       Runtime: nodejs12.x
       Handler: index.handler
