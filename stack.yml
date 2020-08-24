@@ -118,11 +118,11 @@ Resources:
               "statusCode": 200,
               "headers": {
                 "Content-Type": "application/json"
-                }
+                },
               "body": JSON.stringify("chale")
             }
           }
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Handler: index.handler
       Role: !GetAtt LambdaExecutionRole.Arn
       MemorySize: !Ref FunctionMemorySize
