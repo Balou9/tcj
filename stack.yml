@@ -113,7 +113,7 @@ Resources:
     Properties:
       Code:
         ZipFile: |
-          exports.handler = () => {
+          exports.handler = function(event) {
             return {
               "statusCode": 200,
               "headers": {
@@ -122,7 +122,7 @@ Resources:
               "body": JSON.stringify("chale")
             }
           }
-      Runtime: nodejs12.x
+      Runtime: nodejs10.x
       Handler: index.handler
       Role: !GetAtt LambdaExecutionRole.Arn
       MemorySize: !Ref FunctionMemorySize
