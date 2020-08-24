@@ -113,15 +113,13 @@ Resources:
     Properties:
       Code:
         ZipFile: |
-          exports.handler = (event) => {
-            var profile = "chale!!!!!"
-
+          exports.handler = () => {
             return {
               "statusCode": 200,
               "headers": {
                 "Content-Type": "application/json"
-              }
-              "body": JSON.stringify(profile)
+                }
+              "body": JSON.stringify("chale")
             }
           }
       Runtime: nodejs12.x
