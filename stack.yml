@@ -114,14 +114,16 @@ Resources:
       Code:
         ZipFile: |
           exports.handler = function(event) {
+            var responseBody = {
+              "message": "chale"
+            }
             var response =  {
               "statusCode": 200,
               "headers": {
                 "Content-Type": "application/json"
                 },
-              "body": JSON.stringify("chale")
+              "body": JSON.stringify(responseBody)
             }
-
             return response
           }
       Runtime: nodejs12.x
