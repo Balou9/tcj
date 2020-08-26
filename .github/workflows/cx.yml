@@ -60,7 +60,7 @@ jobs:
         id: configure_environment
         run: |
           echo "::set-env name=_STACK_NAME::chale-$_ENVIRONMENT"
-          echo "::set-env name=_GET_PROFILE_HANDLER_NAME::payola-$_ENVIRONMENT-getprofilehandler"
+          echo "::set-env name=_GET_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-getprofilehandler"
           echo "::set-output name=_stack_name::chale-$_ENVIRONMENT"
 
       - name: deploy the core stack
