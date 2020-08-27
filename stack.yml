@@ -112,6 +112,8 @@ Resources:
   GetProfileHandler:
     Type: AWS::Lambda::Function
     Properties:
+      Code:
+        ZipFile: // dummy
       Runtime: nodejs12.x
       Handler: lambdas/getProfile.handler
       Role: !GetAtt LambdaExecutionRole.Arn
