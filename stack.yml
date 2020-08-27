@@ -59,7 +59,7 @@ Resources:
   RestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: !Sub ${AWS::StackName}-restapi-${Environment}
+      Name: !Sub ${AWS::StackName}-restapi
 
   ProfileResource:
     Type: AWS::ApiGateway::Resource
