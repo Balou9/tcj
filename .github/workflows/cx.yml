@@ -74,7 +74,7 @@ jobs:
               FunctionMemorySize=${{ env.FUNC_MEMORY_SIZE }} \
               FunctionTimeout=${{ env.FUNC_TIMEOUT}} \
               FunctionLogRetentionInDays=${{ env.FUNC_LOG_RETENTION_DAYS }} \
-              AccessLogRetentionDays=${{ env.ACCESS_LOG_RETENTION_DAYS }} \
+              AccessLogRetentionInDays=${{ env.ACCESS_LOG_RETENTION_DAYS }} \
               GetProfileHandlerName=${{ env._GET_PROFILE_HANDLER_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
