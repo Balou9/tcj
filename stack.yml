@@ -82,6 +82,9 @@ Resources:
           - GetProfileHandlerArn: !GetAtt GetProfileHandler.Arn
       MethodResponses:
         - StatusCode: "200"
+        - StatusCode: "404"
+        - StatusCode: "500"
+        - StatusCode: "502"
       ResourceId: !Ref ProfileResource
       RestApiId: !Ref RestApi
 
