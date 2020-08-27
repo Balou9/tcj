@@ -34,7 +34,7 @@ Parameters:
     AllowedPattern: "^(test|prod)$"
     Type: String
 
-  FunctionMemorySize:
+  FunctionMemorySize:Execution failed due to configuration error: Invalid permissions on Lambda function
     Description: How many megabytes of ram to allocate for the lambda
     Type: Number
     Default: 128
@@ -118,7 +118,7 @@ Resources:
             var responseBody = {
               "message": "chale"
             }
-            var response =  {
+            return {
               "statusCode": 200,
               "headers": {
                 "Content-Type": "application/json",
@@ -126,7 +126,6 @@ Resources:
                  },
               "body": JSON.stringify(responseBody),
             }
-            return response
           }
       Runtime: nodejs12.x
       Handler: index.handler
