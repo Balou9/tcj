@@ -76,6 +76,7 @@ Resources:
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
+        ContentHandling: CONVERT_TO_BINARY
         Uri: !Sub
           - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetProfileHandlerArn}/invocations
           - GetProfileHandlerArn: !GetAtt GetProfileHandler.Arn
