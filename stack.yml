@@ -34,7 +34,7 @@ Parameters:
     AllowedPattern: "^(test|prod)$"
     Type: String
 
-  FunctionMemorySize:Execution failed due to configuration error: Invalid permissions on Lambda function
+  FunctionMemorySize:
     Description: How many megabytes of ram to allocate for the lambda
     Type: Number
     Default: 128
