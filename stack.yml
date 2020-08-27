@@ -108,12 +108,6 @@ Resources:
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
 
-              # - Sid: AllowApiInvocation
-              #   Effect: Allow
-              #   Action:
-              #     - "execute-api:Invoke"
-              #   Resource: arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/GET/profile
-
   GetProfileHandler:
     Type: AWS::Lambda::Function
     Properties:
@@ -133,7 +127,6 @@ Resources:
             return response
           }
       Runtime: nodejs12.x
-      FunctionName: !Ref GetProfileHandlerName
       Handler: index.handler
       Role: !GetAtt LambdaExecutionRole.Arn
       MemorySize: !Ref FunctionMemorySize
