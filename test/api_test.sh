@@ -51,6 +51,7 @@ test_profile_get_200() {
   lurc \
     -X "GET" \
     -D "$resp_head" \
+    -H "Content-Type: application/json"
     "$_BASE_URL/profile"
   > "$resp_body"
 
