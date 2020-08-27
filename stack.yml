@@ -112,23 +112,8 @@ Resources:
   GetProfileHandler:
     Type: AWS::Lambda::Function
     Properties:
-      Code:
-        ZipFile: |
-          exports.handler = function(event) {
-            var responseBody = {
-              "message": "chale"
-            }
-            var response =  {
-              "statusCode": 200,
-              "headers": {
-                "Content-Type": "application/json"
-                },
-              "body": JSON.stringify(responseBody)
-            }
-            return response
-          }
       Runtime: nodejs12.x
-      Handler: index.handler
+      Handler: lambdas/getProfile.handler
       Role: !GetAtt LambdaExecutionRole.Arn
       MemorySize: !Ref FunctionMemorySize
       Timeout: !Ref FunctionTimeout
