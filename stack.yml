@@ -130,9 +130,10 @@ Resources:
               "body": JSON.stringify(responseBody),
             }
           }
-      Runtime: nodejs12.x
+      FunctionName: !Ref GetProfileHandlerName
       Handler: index.handler
       Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: nodejs12.x
       MemorySize: !Ref FunctionMemorySize
       Timeout: !Ref FunctionTimeout
 
