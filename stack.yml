@@ -70,7 +70,7 @@ Resources:
       Name: !Sub ${AWS::StackName}-requestvalidator
       RestApiId: !Ref RestApi
       ValidateRequestBody: True
-      ValidateRequestParameters: False # TODO: to true when passing req params
+      ValidateRequestParameters: False # TODO: set to true when passing req params
 
   ProfileResource:
     Type: AWS::ApiGateway::Resource
@@ -135,11 +135,11 @@ Resources:
           Value: !Ref GetProfileHandlerName
       Code:
         ZipFile: |
-          exports.handler = function(event) {
+          exports.handler = function(event, callback) {
             var responseBody = {
               "message": "chale"
             }
-            return {
+            var payload = {
               "statusCode": 200,
               "headers": {
                 "Content-Type": "application/json",
@@ -147,6 +147,8 @@ Resources:
                  },
               "body": JSON.stringify(responseBody),
             }
+
+            callback(null, payload)
           }
       FunctionName: !Ref GetProfileHandlerName
       Handler: index.handler
