@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Chale Api Stack
+Description: chale stack
 
 Metadata:
   AWS::Cloudformation::Interface:
@@ -60,6 +60,9 @@ Resources:
     Type: AWS::ApiGateway::RestApi
     Properties:
       Name: !Sub ${AWS::StackName}-restapi
+      Tags:
+        - Key: "chale:name"
+          Value: !Sub ${AWS::StackName}-restapi
 
   ProfileResource:
     Type: AWS::ApiGateway::Resource
@@ -88,9 +91,12 @@ Resources:
       ResourceId: !Ref ProfileResource
       RestApiId: !Ref RestApi
 
-  LambdaExecutionRole:
+  GetProfileHandlerExecutionRole:
     Type: AWS::IAM::Role
     Properties:
+      Tags:
+        - Key: "chale:name"
+          Value: !Sub ${GetProfileHandlerName}-executionrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -100,7 +106,7 @@ Resources:
               Service: lambda.amazonaws.com
             Action: sts:AssumeRole
       Policies:
-        - PolicyName: LambdaExecutionPolicy
+        - PolicyName: GetProfileHandlerExecutionPolicy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -115,6 +121,9 @@ Resources:
   GetProfileHandler:
     Type: AWS::Lambda::Function
     Properties:
+      Tags:
+        - Key: "chale:name"
+          Value: !Ref GetProfileHandlerName
       Code:
         ZipFile: |
           exports.handler = function(event) {
@@ -132,7 +141,7 @@ Resources:
           }
       FunctionName: !Ref GetProfileHandlerName
       Handler: index.handler
-      Role: !GetAtt LambdaExecutionRole.Arn
+      Role: !GetAtt GetProfileHandlerExecutionRole.Arn
       Runtime: nodejs12.x
       MemorySize: !Ref FunctionMemorySize
       Timeout: !Ref FunctionTimeout
@@ -162,6 +171,9 @@ Resources:
   ApiGatewayLoggingRole:
     Type: AWS::IAM::Role
     Properties:
+      Tags:
+        - Key: "chale:name"
+          Value: !Sub ${AWS::StackName}-apigateway-loggingrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -190,6 +202,9 @@ Resources:
   Stage:
     Type: AWS::ApiGateway::Stage
     Properties:
+      Tags:
+        - Key: "chale:name"
+          Value: !Sub ${AWS::StackName}-stage
       AccessLogSetting:
         DestinationArn: !GetAtt AccessLogGroup.Arn
         Format: '{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","caller":"$context.identity.caller","user":"$context.identity.user","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}'
