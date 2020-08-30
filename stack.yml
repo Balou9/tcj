@@ -64,6 +64,14 @@ Resources:
         - Key: "chale:name"
           Value: !Sub ${AWS::StackName}-restapi
 
+  RequestValidator:
+    Type: AWS::ApiGateway::RequestValidator
+    Properties:
+      Name: !Sub ${AWS::StackName}-requestvalidator
+      RestApiId: !Ref RestApi
+      ValidateRequestBody: True
+      ValidateRequestParameters: False # TODO: to true when passing req params
+
   ProfileResource:
     Type: AWS::ApiGateway::Resource
     Properties:
@@ -76,6 +84,7 @@ Resources:
     Properties:
       AuthorizationType: NONE
       HttpMethod: GET
+      RequestValidatorId: !Ref RequestValidator
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
