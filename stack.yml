@@ -135,7 +135,7 @@ Resources:
           Value: !Ref GetProfileHandlerName
       Code:
         ZipFile: |
-          exports.handler = function(event, callback) {
+          exports.handler = function(event) {
             var responseBody = {
               "message": "chale"
             }
@@ -148,7 +148,7 @@ Resources:
               "body": JSON.stringify(responseBody),
             }
 
-            callback(null, payload)
+            return payload
           }
       FunctionName: !Ref GetProfileHandlerName
       Handler: index.handler
