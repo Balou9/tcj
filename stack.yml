@@ -136,16 +136,15 @@ Resources:
       Code:
         ZipFile: |
           exports.handler = function(event) {
-            var responseBody = {
-              "message": "chale"
-            }
+            var result = JSON.stringify({"message": "chaleee"})
+
             var payload = {
               "statusCode": 200,
               "headers": {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*"
                  },
-              "body": JSON.stringify(responseBody),
+              "body": result
             }
 
             return payload
