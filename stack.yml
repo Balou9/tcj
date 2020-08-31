@@ -135,7 +135,7 @@ Resources:
           Value: !Ref GetProfileHandlerName
       Code:
         ZipFile: |
-          exports.handler = function(event, context) {
+          module.exports.handler = (event, context) => {
             var result = JSON.stringify({"message": "chaleee"});
 
             return {
@@ -143,10 +143,10 @@ Resources:
               headers: {
                 "content-type": "application/json",
               },
-              body: result
+              body: result,
             };
-            
-          }
+
+          };
       FunctionName: !Ref GetProfileHandlerName
       Handler: index.handler
       Role: !GetAtt GetProfileHandlerExecutionRole.Arn
