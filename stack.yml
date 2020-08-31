@@ -174,7 +174,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt GetProfileHandler.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/GET/profile
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/GET/profile
 
   ApiGatewayAccount:
     Type: AWS::ApiGateway::Account
