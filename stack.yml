@@ -135,7 +135,7 @@ Resources:
           Value: !Ref GetProfileHandlerName
       Code:
         ZipFile: |
-          exports.handler = function(event) {
+          exports.handler = function(event, context) {
             var result = JSON.stringify({"message": "chaleee"})
 
             var payload = {
