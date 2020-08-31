@@ -126,9 +126,9 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
-              - Sid: AllowApiGateWayAction
+              - Sid: AllowResourceAccess
                 Effect: Allow
-                Action: apigateway:GET
+                Action: apigateway:*
                 Resource: "*"
 
   GetProfileHandler:
