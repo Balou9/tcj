@@ -129,7 +129,7 @@ Resources:
               - Sid: AllowResourceAccess
                 Effect: Allow
                 Action: apigateway:*
-                Resource: "arn:aws:apigateway:us-east-1:*:*"
+                Resource: "*"
 
   GetProfileHandler:
     Type: AWS::Lambda::Function
