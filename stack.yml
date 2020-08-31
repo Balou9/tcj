@@ -136,17 +136,16 @@ Resources:
       Code:
         ZipFile: |
           exports.handler = function(event, context) {
-            var result = JSON.stringify({"message": "chaleee"})
+            var result = JSON.stringify({"message": "chaleee"});
 
-            var payload = {
-              "statusCode": 200,
-              "headers": {
+            return {
+              statusCode: 200,
+              headers: {
                 "content-type": "application/json",
-                 },
-              "body": result
-            }
-
-            return payload
+              },
+              body: result
+            };
+            
           }
       FunctionName: !Ref GetProfileHandlerName
       Handler: index.handler
