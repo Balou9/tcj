@@ -128,7 +128,8 @@ Resources:
                 Resource: arn:aws:logs:*:*:*
               - Sid: AllowResourceAccess
                 Effect: Allow
-                Action: apigateway:*
+                Action:
+                  - apigateway:*
                 Resource: "*"
 
   GetProfileHandler:
