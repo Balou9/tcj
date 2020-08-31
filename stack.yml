@@ -141,8 +141,7 @@ Resources:
             var payload = {
               "statusCode": 200,
               "headers": {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*"
+                "content-type": "application/json",
                  },
               "body": result
             }
