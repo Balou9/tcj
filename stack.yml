@@ -126,6 +126,10 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
+              - Sid: AllowApiGateWayAction
+                Effect: Allow
+                Action: apigateway:GET
+                Resource: "*"
 
   GetProfileHandler:
     Type: AWS::Lambda::Function
