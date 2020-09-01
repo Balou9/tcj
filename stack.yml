@@ -80,7 +80,7 @@ Resources:
       RestApiId: !Ref RestApi
 
   ProfileResource:
-    Type: AWS:ApiGateway::Resource
+    Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !Ref ProfileCollectionResource
       PathPart: "{profileName}"
