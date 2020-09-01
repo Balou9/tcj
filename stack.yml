@@ -70,13 +70,20 @@ Resources:
       Name: !Sub ${AWS::StackName}-requestvalidator
       RestApiId: !Ref RestApi
       ValidateRequestBody: True
-      ValidateRequestParameters: False # TODO: set to true when passing req params
+      ValidateRequestParameters: True
 
-  ProfileResource:
+  ProfileCollectionResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt RestApi.RootResourceId
       PathPart: profile
+      RestApiId: !Ref RestApi
+
+  ProfileResource:
+    Type: AWS:ApiGateway::Resource
+    Properties:
+      ParentId: !Ref ProfileCollectionResource
+      PathPart: "{profileName}"
       RestApiId: !Ref RestApi
 
   CreateGetProfileMethod:
@@ -84,6 +91,8 @@ Resources:
     Properties:
       AuthorizationType: NONE
       HttpMethod: GET
+      RequestParameters:
+        method.request.path.profileName: True
       RequestValidatorId: !Ref RequestValidator
       Integration:
         Type: AWS_PROXY
@@ -174,7 +183,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt GetProfileHandler.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/GET/profile
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/GET/profile/*
 
   ApiGatewayAccount:
     Type: AWS::ApiGateway::Account
