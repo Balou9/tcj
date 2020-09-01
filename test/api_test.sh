@@ -48,11 +48,13 @@ test_profile_get_200() {
   resp_head="$(mktemp)"
   resp_body="$(mktemp)"
 
+  profile_id="balou419"
+
   lurc \
     -X "GET" \
     -D "$resp_head" \
     -H "content-type: application/json" \
-    "$_BASE_URL/profile"
+    "$_BASE_URL/profile/$profile_id"
   > "$resp_body"
 
   cat "$resp_body"
