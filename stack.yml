@@ -45,7 +45,7 @@ Parameters:
     Default: 3
 
   GetProfileHandlerName:
-    Description: Lambda function name for the 'get profile' handler
+    Description: Lambda function name
     AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
     Type: String
 
@@ -145,7 +145,7 @@ Resources:
       Code:
         ZipFile: |
           module.exports.handler = (event, context) => {
-            var result = JSON.stringify({profileUuid: "chaleee"});
+            var result = JSON.stringify({profileUuid: "chaleee"})
 
             return {
               statusCode: 200,
@@ -153,9 +153,9 @@ Resources:
                 content-type: "application/json",
               },
               body: result
-            };
+            }
 
-          };
+          }
       FunctionName: !Ref GetProfileHandlerName
       Handler: index.handler
       Role: !GetAtt GetProfileHandlerExecutionRole.Arn
