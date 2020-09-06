@@ -145,7 +145,7 @@ Resources:
       Code:
         ZipFile: |
           module.exports.handler = (event, context) => {
-            var result = JSON.stringify({"chaleee"})
+            var result = JSON.stringify({"chaleee"});
 
             return {
               statusCode: 200,
@@ -153,9 +153,9 @@ Resources:
                 content-type: "application/json",
               },
               body: result
-            }
+            };
 
-          }
+          };
       FunctionName: !Ref GetProfileHandlerName
       Handler: index.handler
       Role: !GetAtt GetProfileHandlerExecutionRole.Arn
