@@ -145,7 +145,7 @@ Resources:
       Code:
         ZipFile: |
           module.exports.handler = (event, context) => {
-            var result = JSON.stringify({"chaleee"});
+            var result = JSON.stringify({profileUuid: "chaleee"});
 
             return {
               statusCode: 200,
