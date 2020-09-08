@@ -144,16 +144,18 @@ Resources:
           Value: !Ref GetProfileHandlerName
       Code:
         ZipFile: |
-          module.exports.handler = (event, context) => {
-            var result = JSON.stringify({"profileUuid": "chaleee"})
+          module.exports.handler = (event, context, callback) => {
+            var payload = {"profileUuid": "chaleee"}
 
-            return {
+            var response = {
               "statusCode": 200,
               "headers": {
                 "content-type": "application/json",
               },
-              "body": result
+              "body": JSON.stringifiy(payload)
             }
+
+            callback(null, response)
 
           }
       FunctionName: !Ref GetProfileHandlerName
