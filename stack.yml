@@ -152,7 +152,7 @@ Resources:
               "headers": {
                 "content-type": "application/json",
               },
-              "body": JSON.stringifiy(payload)
+              "body": JSON.stringify(payload)
             }
 
             callback(null, response)
