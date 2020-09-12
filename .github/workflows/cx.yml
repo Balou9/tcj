@@ -79,6 +79,30 @@ jobs:
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
+      - name: deploy the get profile handler
+        run: |
+          code_size=$( \
+            aws lambda get-function-configuration \
+              --function-name=${{ env._GET_PROFILE_HANDLER_NAME }} \
+              --query=CodeSize \
+          )
+          if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profile/get/*" || \
+             (( $code_size < 419 ));
+          then
+            cd ./lambdas/documents/upsert
+            npm ci --only=prod
+            cd ../../..
+            npx @zeit/ncc@0.22.3 build \
+              --external=aws-sdk \
+              --out=./lambdas/profile/bundles/get \
+              ./lambdas/profile/get/index.js
+            zip -j /tmp/bundle.zip ./lambdas/profile/bundles/get/index.js
+            aws lambda update-function-code \
+              --function-name=${{ env._GET_PROFILE_HANDLER_NAME }} \
+              --publish \
+              --zip-file=fileb:///tmp/bundle.zip
+          fi
+
 
   test:
     runs-on: ubuntu-latest

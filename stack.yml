@@ -143,21 +143,7 @@ Resources:
         - Key: "chale:name"
           Value: !Ref GetProfileHandlerName
       Code:
-        ZipFile: |
-          module.exports.handler = (event, context, callback) => {
-            var payload = {"profileUuid": "chaleee"}
-
-            var response = {
-              "statusCode": 200,
-              "headers": {
-                "content-type": "application/json",
-              },
-              "body": JSON.stringify(payload)
-            }
-
-            callback(null, response)
-
-          }
+        ZipFile: // dummy
       FunctionName: !Ref GetProfileHandlerName
       Handler: index.handler
       Role: !GetAtt GetProfileHandlerExecutionRole.Arn
