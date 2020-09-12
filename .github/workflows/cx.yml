@@ -89,7 +89,7 @@ jobs:
           if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profile/get/*" || \
              (( $code_size < 419 ));
           then
-            cd ./lambdas/documents/upsert
+            cd ./lambdas/profile/get
             npm ci --only=prod
             cd ../../..
             npx @zeit/ncc@0.22.3 build \
