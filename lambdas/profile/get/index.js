@@ -1,5 +1,5 @@
 module.exports.handler = (event, context, callback) => {
-  var payload = {"profileUuid": "chaleee"}
+  var payload = {"profileUuid": "chalee"}
 
   var response = {
     "statusCode": 200,
