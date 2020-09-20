@@ -123,7 +123,7 @@ Resources:
       RequestParameters:
         method.request.header.content-type: True
         method.request.path.profileName: True
-      RequestValidator: !Ref RequestValidator
+      RequestValidatorId: !Ref RequestValidator
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
