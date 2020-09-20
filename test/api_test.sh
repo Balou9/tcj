@@ -75,6 +75,5 @@ test_profile_upsert_204() {
     -D "$resp_head" \
     "$_BASE_URL/profile/$profile_id"
 
-  cat "$resp_head"
   assert_status "$resp_head" 204
 }

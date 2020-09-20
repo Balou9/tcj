@@ -194,6 +194,14 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
+              - Sid: AllowDynamoDbInteraction
+                Effect: Allow
+                Action:
+                  - dynamodb:DescribeStream
+                  - dynamodb:GetRecords
+                  - dynamodb:GetSharedIterator
+                  - dynamodb:ListStreams
+                Resource: arn:aws:dynamodb:*:*:*
 
   ReadProfileHandler:
     Type: AWS::Lambda::Function
