@@ -80,6 +80,7 @@ jobs:
               FunctionLogRetentionInDays=${{ env.FUNC_LOG_RETENTION_DAYS }} \
               AccessLogRetentionInDays=${{ env.ACCESS_LOG_RETENTION_DAYS }} \
               ReadProfileHandlerName=${{ env._READ_PROFILE_HANDLER_NAME }} \
+              UpsertProfileHandlerName=${{ env._UPSERT_PROFILE_HANDLER_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
@@ -103,6 +104,30 @@ jobs:
             zip -j /tmp/bundle.zip ./lambdas/profile/bundles/read/index.js
             aws lambda update-function-code \
               --function-name=${{ env._READ_PROFILE_HANDLER_NAME }} \
+              --publish \
+              --zip-file=fileb:///tmp/bundle.zip
+          fi
+
+      - name: deploy the upsert profile handler
+        run: |
+          code_size=$( \
+            aws lambda get-function-configuration \
+              --function-name=${{ env._UPSERT_PROFILE_HANDLER_NAME }} \
+              --query=CodeSize \
+          )
+          if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profile/upsert/*" || \
+             (( $code_size < 419 ));
+          then
+            cd ./lambdas/profile/upsert
+            npm ci --only=prod
+            cd ../../..
+            npx @zeit/ncc@0.22.3 build \
+              --external=aws-sdk \
+              --out=./lambdas/profile/bundles/upsert \
+              ./lambdas/profile/upsert/index.js
+            zip -j /tmp/bundle.zip ./lambdas/profile/bundles/upsert/index.js
+            aws lambda update-function-code \
+              --function-name=${{ env._UPSERT_PROFILE_HANDLER_NAME }} \
               --publish \
               --zip-file=fileb:///tmp/bundle.zip
           fi
