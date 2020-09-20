@@ -71,7 +71,7 @@ test_profile_upsert_204() {
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
-    # --data {profileName: "abi73"} \
+    --data "{'profileName': 'abi73'}" \
     -D "$resp_head" \
     "$_BASE_URL/profile/$profile_id"
 
