@@ -65,6 +65,7 @@ jobs:
         run: |
           echo "::set-env name=_STACK_NAME::chale-$_ENVIRONMENT"
           echo "::set-env name=_READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler"
+          echo "::set-env name=_UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler"
           echo "::set-output name=_stack_name::chale-$_ENVIRONMENT"
 
       - name: deploy the core stack
