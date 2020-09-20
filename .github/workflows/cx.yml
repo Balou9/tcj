@@ -13,7 +13,7 @@ env:
 defaults:
   run:
     shell: "/bin/bash {0}"
-    
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
         id: configure_environment
         run: |
           echo "::set-env name=_STACK_NAME::chale-$_ENVIRONMENT"
-          echo "::set-env name=_GET_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-getprofilehandler"
+          echo "::set-env name=_READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler"
           echo "::set-output name=_stack_name::chale-$_ENVIRONMENT"
 
       - name: deploy the core stack
@@ -79,30 +79,30 @@ jobs:
               FunctionTimeout=${{ env.FUNC_TIMEOUT}} \
               FunctionLogRetentionInDays=${{ env.FUNC_LOG_RETENTION_DAYS }} \
               AccessLogRetentionInDays=${{ env.ACCESS_LOG_RETENTION_DAYS }} \
-              GetProfileHandlerName=${{ env._GET_PROFILE_HANDLER_NAME }} \
+              ReadProfileHandlerName=${{ env._READ_PROFILE_HANDLER_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
-      - name: deploy the get profile handler
+      - name: deploy the read profile handler
         run: |
           code_size=$( \
             aws lambda get-function-configuration \
-              --function-name=${{ env._GET_PROFILE_HANDLER_NAME }} \
+              --function-name=${{ env._READ_PROFILE_HANDLER_NAME }} \
               --query=CodeSize \
           )
-          if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profile/get/*" || \
+          if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profile/read/*" || \
              (( $code_size < 419 ));
           then
-            cd ./lambdas/profile/get
+            cd ./lambdas/profile/read
             npm ci --only=prod
             cd ../../..
             npx @zeit/ncc@0.22.3 build \
               --external=aws-sdk \
-              --out=./lambdas/profile/bundles/get \
-              ./lambdas/profile/get/index.js
-            zip -j /tmp/bundle.zip ./lambdas/profile/bundles/get/index.js
+              --out=./lambdas/profile/bundles/read \
+              ./lambdas/profile/read/index.js
+            zip -j /tmp/bundle.zip ./lambdas/profile/bundles/read/index.js
             aws lambda update-function-code \
-              --function-name=${{ env._GET_PROFILE_HANDLER_NAME }} \
+              --function-name=${{ env._READ_PROFILE_HANDLER_NAME }} \
               --publish \
               --zip-file=fileb:///tmp/bundle.zip
           fi
@@ -135,4 +135,4 @@ jobs:
         run: |
           printf "[DEBUG] api base url: %s\n" "$_BASE_URL"
           source ./test/api_test.sh
-          test_profile_get_200
+          test_profile_read_200

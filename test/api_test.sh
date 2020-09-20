@@ -43,8 +43,8 @@ lurc() {
   curl -s --proto '=https' --tlsv1.2 "$@"
 }
 
-test_profile_get_200() {
-  printf "test_profile_get_200\n"
+test_profile_read_200() {
+  printf "test_profile_read_200\n"
   resp_head="$(mktemp)"
   resp_body="$(mktemp)"
 

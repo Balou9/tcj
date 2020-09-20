@@ -16,7 +16,7 @@ Metadata:
           - FunctionMemorySize
           - FunctionTimeout
           - FunctionLogRetentionInDays
-          - GetProfileHandlerName
+          - ReadProfileHandlerName
 
 Parameters:
   ApiStageName:
@@ -44,7 +44,7 @@ Parameters:
     Type: Number
     Default: 3
 
-  GetProfileHandlerName:
+  ReadProfileHandlerName:
     Description: Lambda function name
     AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
     Type: String
@@ -86,7 +86,7 @@ Resources:
       PathPart: "{profileName}"
       RestApiId: !Ref RestApi
 
-  CreateGetProfileMethod:
+  ReadProfileMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -99,8 +99,8 @@ Resources:
         IntegrationHttpMethod: POST
         ContentHandling: CONVERT_TO_BINARY
         Uri: !Sub
-          - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetProfileHandlerArn}/invocations
-          - GetProfileHandlerArn: !GetAtt GetProfileHandler.Arn
+          - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ReadProfileHandlerArn}/invocations
+          - ReadProfileHandlerArn: !GetAtt ReadProfileHandler.Arn
       MethodResponses:
         - StatusCode: "200"
         - StatusCode: "404"
@@ -109,12 +109,12 @@ Resources:
       ResourceId: !Ref ProfileResource
       RestApiId: !Ref RestApi
 
-  GetProfileHandlerExecutionRole:
+  ReadProfileHandlerExecutionRole:
     Type: AWS::IAM::Role
     Properties:
       Tags:
         - Key: "chale:name"
-          Value: !Sub ${GetProfileHandlerName}-executionrole
+          Value: !Sub ${ReadProfileHandlerName}-executionrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -124,7 +124,7 @@ Resources:
               Service: lambda.amazonaws.com
             Action: sts:AssumeRole
       Policies:
-        - PolicyName: GetProfileHandlerExecutionPolicy
+        - PolicyName: ReadProfileHandlerExecutionPolicy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -136,35 +136,35 @@ Resources:
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
 
-  GetProfileHandler:
+  ReadProfileHandler:
     Type: AWS::Lambda::Function
     Properties:
       Tags:
         - Key: "chale:name"
-          Value: !Ref GetProfileHandlerName
+          Value: !Ref ReadProfileHandlerName
       Code:
         ZipFile: // dummy
-      FunctionName: !Ref GetProfileHandlerName
+      FunctionName: !Ref ReadProfileHandlerName
       Handler: index.handler
-      Role: !GetAtt GetProfileHandlerExecutionRole.Arn
+      Role: !GetAtt ReadProfileHandlerExecutionRole.Arn
       Runtime: nodejs12.x
       MemorySize: !Ref FunctionMemorySize
       Timeout: !Ref FunctionTimeout
 
-  GetProfileHandlerLogGroup:
+  ReadProfileHandlerLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub /aws/lambda/${GetProfileHandlerName}
+      LogGroupName: !Sub /aws/lambda/${ReadProfileHandlerName}
       RetentionInDays: !Ref FunctionLogRetentionInDays
 
-  GetProfileHandlerPermission:
+  ReadProfileHandlerPermission:
     Type: AWS::Lambda::Permission
     DependsOn:
       - RestApi
-      - GetProfileHandler
+      - ReadProfileHandler
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt GetProfileHandler.Arn
+      FunctionName: !GetAtt ReadProfileHandler.Arn
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*/*
 
@@ -194,7 +194,7 @@ Resources:
   Deployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
-      - CreateGetProfileMethod
+      - ReadProfileMethod
     Properties:
       RestApiId: !Ref RestApi
 
