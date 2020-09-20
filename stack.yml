@@ -17,6 +17,7 @@ Metadata:
           - FunctionTimeout
           - FunctionLogRetentionInDays
           - ReadProfileHandlerName
+          - UpsertProfileHandlerName
 
 Parameters:
   ApiStageName:
@@ -45,6 +46,11 @@ Parameters:
     Default: 3
 
   ReadProfileHandlerName:
+    Description: Lambda function name
+    AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
+    Type: String
+
+  UpsertProfileHandlerName:
     Description: Lambda function name
     AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
     Type: String
@@ -109,6 +115,32 @@ Resources:
       ResourceId: !Ref ProfileResource
       RestApiId: !Ref RestApi
 
+  UpsertProfileMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: PUT
+      RequestParameters:
+        method.request.header.content-type: True
+        method.request.path.profileName: True
+      RequestValidator: !Ref RequestValidator
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        ContentHandling: CONVERT_TO_BINARY
+        Uri: !Sub
+          - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UpsertProfileHandlerArn}/invocations
+          - UpsertProfileHandlerArn: !GetAtt UpsertProfileHandler.Arn
+      MethodResponses:
+        - StatusCode: "204"
+        - StatusCode: "400"
+        - StatusCode: "413"
+        - StatusCode: "415"
+        - StatusCode: "500"
+        - StatusCode: "502"
+      ResourceId: !Ref ProfileResource
+      RestApiId: !Ref RestApi
+
   ReadProfileHandlerExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -136,6 +168,33 @@ Resources:
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
 
+  UpsertProfileHandlerExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Tags:
+        - Key: "chale:name"
+          Value: !Sub ${UpsertProfileHandlerName}-executionrole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowAssumeRoleByLambda
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: UpsertProfileHandlerExecutionPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: AllowLogCreation
+                Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+
   ReadProfileHandler:
     Type: AWS::Lambda::Function
     Properties:
@@ -151,10 +210,31 @@ Resources:
       MemorySize: !Ref FunctionMemorySize
       Timeout: !Ref FunctionTimeout
 
+  UpsertProfileHandler:
+    Type: AWS::Lambda::Function
+    Properties:
+      Tags:
+        - Key: "chale:name"
+          Value: !Ref UpsertProfileHandlerName
+      Code:
+        ZipFile: // dummy
+      FunctionName: !Ref UpsertProfileHandlerName
+      Handler: index.handler
+      Role: !GetAtt UpsertProfileHandlerExecutionRole.Arn
+      Runtime: nodejs12.x
+      MemorySize: !Ref FunctionMemorySize
+      Timeout: !Ref FunctionTimeout
+
   ReadProfileHandlerLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub /aws/lambda/${ReadProfileHandlerName}
+      RetentionInDays: !Ref FunctionLogRetentionInDays
+
+  UpsertProfileHandlerLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${UpsertProfileHandlerName}
       RetentionInDays: !Ref FunctionLogRetentionInDays
 
   ReadProfileHandlerPermission:
@@ -165,6 +245,17 @@ Resources:
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt ReadProfileHandler.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*/*
+
+  UpsertProfileHandlerPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - RestApi
+      - UpsertProfileHandler
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt UpsertProfileHandler.Arn
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*/*
 
