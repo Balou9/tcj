@@ -321,10 +321,10 @@ Resources:
       KeySchema:
         -
           AttributeName: "profileUuid"
-          KeyType: RANGE
+          KeyType: HASH
         -
           AttributeName: "stamina"
-          KeyType: HASH
+          KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: !Ref ProfileTableReadScalingMinCapacity
         WriteCapacityUnits: !Ref ProfileTableWriteScalingMinCapacity
