@@ -290,6 +290,20 @@ Resources:
       ManagedPolicyArns:
         - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
 
+  ProfileTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      Tags:
+        - Key: "chale:name"
+          Value: !Sub profile-dynamo-table
+      AttributeDefinitions:
+        -
+          AttributeName: "profileUuid"
+          AttributeType: "S"
+        -
+          AttributeName: "stamina"
+          AttributeType: "N"
+
   Deployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
