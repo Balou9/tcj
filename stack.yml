@@ -9,6 +9,11 @@ Metadata:
         Parameters:
           - Environment
       - Label:
+          default: Storage
+        Parameters:
+          - ProfileTableReadScalingMinCapacity
+          - AccountTableWriteScalingMinCapacity
+      - Label:
           default: API
         Parameters:
           - ApiStageName
@@ -59,6 +64,16 @@ Parameters:
     Description: Lambda log retention in days
     Type: Number
     Default: 7
+
+  ProfileTableReadScalingMinCapacity:
+    Description: Minimum read capacity units for autoscaling the profile table
+    Type: Number
+    Default: 1
+
+  ProfileTableWriteScalingMinCapacity:
+    Description: Minimum write capacity units for autoscaling the account table
+    Type: Number
+    Default: 1
 
 Resources:
 
@@ -306,7 +321,10 @@ Resources:
       KeySchema:
         -
           AttributeName: "profileUuid"
-          KeyType: RANGE      
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: !Ref ProfileTableReadScalingMinCapacity
+        WriteCapacityUnits: !Ref ProfileTableWriteScalingMinCapacity
 
   Deployment:
     Type: AWS::ApiGateway::Deployment

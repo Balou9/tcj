@@ -9,6 +9,8 @@ env:
   FUNC_MEMORY_SIZE: 128
   FUNC_TIMEOUT: 5
   FUNC_LOG_RETENTION_DAYS: 7
+  PROFILE_TABLE_READ_SCALING_MIN_CAPACITY: 1
+  PROFILE_TABLE_WRITE_SCALING_MIN_CAPACITY: 1
 
 defaults:
   run:
@@ -82,6 +84,8 @@ jobs:
               AccessLogRetentionInDays=${{ env.ACCESS_LOG_RETENTION_DAYS }} \
               ReadProfileHandlerName=${{ env._READ_PROFILE_HANDLER_NAME }} \
               UpsertProfileHandlerName=${{ env._UPSERT_PROFILE_HANDLER_NAME }} \
+              ProfileTableReadScalingMinCapacity=${{ env.PROFILE_TABLE_READ_SCALING_MIN_CAPACITY }} \
+              ProfileTableWriteScalingMinCapacity=${{ env.PROFILE_TABLE_WRITE_SCALING_MIN_CAPACITY }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
