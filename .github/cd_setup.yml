@@ -23,6 +23,7 @@ Resources:
                   - apigateway:*
                   - cloudfront:*
                   - logs:*
+                  - dynamodb:*
                 Resource: "*"
 
   AccessKey:
