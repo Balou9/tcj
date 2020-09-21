@@ -303,6 +303,10 @@ Resources:
         -
           AttributeName: "stamina"
           AttributeType: "N"
+      KeySchema:
+        -
+          AttributeName: "profileUuid"
+          KeyType: RANGE      
 
   Deployment:
     Type: AWS::ApiGateway::Deployment
