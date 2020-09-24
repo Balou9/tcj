@@ -12,7 +12,7 @@ Metadata:
           default: Storage
         Parameters:
           - ProfileTableReadScalingMinCapacity
-          - AccountTableWriteScalingMinCapacity
+          - ProfileTableWriteScalingMinCapacity
       - Label:
           default: API
         Parameters:
