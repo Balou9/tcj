@@ -71,7 +71,7 @@ Parameters:
     Default: 1
 
   ProfileTableWriteScalingMinCapacity:
-    Description: Minimum write capacity units for autoscaling the account table
+    Description: Minimum write capacity units for autoscaling the profile table
     Type: Number
     Default: 1
 
