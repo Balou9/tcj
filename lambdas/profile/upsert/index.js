@@ -1,13 +1,11 @@
-module.exports.handler = (event, context, callback) => {
+module.exports.handler = async function handler(event, context) => {
 
-  var response = {
+  return {
     "statusCode": 204,
     "headers": {
       "content-type": "application/json",
     },
     "body": ''
   }
-
-  callback(null, response)
 
 }
