@@ -104,7 +104,7 @@ Resources:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !Ref ProfileCollectionResource
-      PathPart: "{profileName}"
+      PathPart: "{profileId}"
       RestApiId: !Ref RestApi
 
   ReadProfileMethod:
@@ -113,7 +113,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: GET
       RequestParameters:
-        method.request.path.profileName: True
+        method.request.path.profileId: True
       RequestValidatorId: !Ref RequestValidator
       Integration:
         Type: AWS_PROXY
@@ -137,7 +137,7 @@ Resources:
       HttpMethod: PUT
       RequestParameters:
         method.request.header.content-type: True
-        method.request.path.profileName: True
+        method.request.path.profileId: True
       RequestValidatorId: !Ref RequestValidator
       Integration:
         Type: AWS_PROXY
@@ -241,6 +241,9 @@ Resources:
           Value: !Ref UpsertProfileHandlerName
       Code:
         ZipFile: // dummy
+      Environment:
+        Variables:
+          PROFILE_TABLE_NAME: !Ref ProfileTable
       FunctionName: !Ref UpsertProfileHandlerName
       Handler: index.handler
       Role: !GetAtt UpsertProfileHandlerExecutionRole.Arn
@@ -315,16 +318,10 @@ Resources:
         -
           AttributeName: "profileUuid"
           AttributeType: "S"
-        -
-          AttributeName: "stamina"
-          AttributeType: "N"
       KeySchema:
         -
           AttributeName: "profileUuid"
           KeyType: HASH
-        -
-          AttributeName: "stamina"
-          KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: !Ref ProfileTableReadScalingMinCapacity
         WriteCapacityUnits: !Ref ProfileTableWriteScalingMinCapacity

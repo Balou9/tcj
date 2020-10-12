@@ -1,13 +1,19 @@
+const AWS = require('aws-sdk')
+const { v4: uuidv4 } = require('uuid')
+var dynamodb = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'})
+
 module.exports.handler = async function handler(event, context) => {
 
-  var response = {
-    "statusCode": 204,
-    "headers": {
-      "content-type": "application/json",
-    },
-    "body": ''
+  var params = {
+    TableName: process.env.PROFILE_TABLE_NAME,
+    Item: {
+      "profileId": uuidv4(),
+      "profile": event.body
+    }
   }
 
-  return response
+  await dynamodb.put(params).promise()
+
+  return { "statusCode": 204 }
 
 }

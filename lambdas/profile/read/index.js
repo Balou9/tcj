@@ -9,6 +9,6 @@ module.exports.handler = (event, context, callback) => {
     "body": JSON.stringify(payload)
   }
 
-  return { statusCode: 200 }
+  callback(null, response)
 
 }
