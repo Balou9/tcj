@@ -316,11 +316,11 @@ Resources:
           Value: !Sub profile-dynamo-table
       AttributeDefinitions:
         -
-          AttributeName: "profileUuid"
+          AttributeName: "profileId"
           AttributeType: "S"
       KeySchema:
         -
-          AttributeName: "profileUuid"
+          AttributeName: "profileId"
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: !Ref ProfileTableReadScalingMinCapacity
