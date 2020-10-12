@@ -66,14 +66,12 @@ test_profile_upsert_204() {
   resp_head="$(mktemp)"
   resp_body="$(mktemp)"
 
-  profile_id="balou419"
-
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
     --data "{'profileName': 'abi73'}" \
     -D "$resp_head" \
-    "$_BASE_URL/profile/$profile_id"
+    "$_BASE_URL/profile"
 
   assert_status "$resp_head" 204
 }
