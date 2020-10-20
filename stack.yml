@@ -137,7 +137,7 @@ Resources:
       HttpMethod: PUT
       RequestParameters:
         method.request.header.content-type: True
-        method.request.path.profileId: True
+        # method.request.path.profileId: True
       RequestValidatorId: !Ref RequestValidator
       Integration:
         Type: AWS_PROXY
