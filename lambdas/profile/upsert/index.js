@@ -7,7 +7,7 @@ module.exports.handler = async function handler(event, context) => {
   var params = {
     TableName: process.env.PROFILE_TABLE_NAME,
     Item: {
-      "profileId": uuidv4(),
+      "profile_id": uuidv4(),
       "profile": event.body
     }
   }

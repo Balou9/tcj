@@ -51,7 +51,7 @@ test_profile_upsert_204() {
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
-    --data @./test/fixtures/profile.json \
+    --data @./test/profile.json \
     -D "$resp_head" \
     "$_BASE_URL/profile"
 

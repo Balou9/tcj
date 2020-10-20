@@ -104,7 +104,7 @@ Resources:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !Ref ProfileCollectionResource
-      PathPart: "{profileId}"
+      PathPart: "{profile_id}"
       RestApiId: !Ref RestApi
 
   ReadProfileMethod:
@@ -212,10 +212,7 @@ Resources:
               - Sid: AllowDynamoDbInteraction
                 Effect: Allow
                 Action:
-                  - dynamodb:DescribeStream
-                  - dynamodb:GetRecords
-                  - dynamodb:GetSharedIterator
-                  - dynamodb:ListStreams
+                  - dynamodb:PutItem
                 Resource: arn:aws:dynamodb:*:*:*
 
   ReadProfileHandler:
@@ -283,7 +280,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt UpsertProfileHandler.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*
 
   ApiGatewayAccount:
     Type: AWS::ApiGateway::Account
@@ -316,11 +313,11 @@ Resources:
           Value: !Sub profile-dynamo-table
       AttributeDefinitions:
         -
-          AttributeName: "profileId"
+          AttributeName: "profile_id"
           AttributeType: "S"
       KeySchema:
         -
-          AttributeName: "profileId"
+          AttributeName: "profile_id"
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: !Ref ProfileTableReadScalingMinCapacity
