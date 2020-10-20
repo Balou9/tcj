@@ -153,7 +153,7 @@ Resources:
         - StatusCode: "415"
         - StatusCode: "500"
         - StatusCode: "502"
-      ResourceId: !Ref ProfileCollectionResource
+      ResourceId: !Ref ProfileResource
       RestApiId: !Ref RestApi
 
   ReadProfileHandlerExecutionRole:
@@ -280,7 +280,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt UpsertProfileHandler.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*
 
   ApiGatewayAccount:
     Type: AWS::ApiGateway::Account
