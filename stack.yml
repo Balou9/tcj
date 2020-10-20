@@ -153,7 +153,7 @@ Resources:
         - StatusCode: "415"
         - StatusCode: "500"
         - StatusCode: "502"
-      ResourceId: !Ref ProfileResource
+      ResourceId: !Ref ProfileCollectionResource
       RestApiId: !Ref RestApi
 
   ReadProfileHandlerExecutionRole:
