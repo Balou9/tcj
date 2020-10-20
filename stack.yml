@@ -283,7 +283,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt UpsertProfileHandler.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*/*
 
   ApiGatewayAccount:
     Type: AWS::ApiGateway::Account
