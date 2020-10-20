@@ -43,24 +43,6 @@ lurc() {
   curl -s --proto '=https' --tlsv1.2 "$@"
 }
 
-test_profile_read_200() {
-  printf "test_profile_read_200\n"
-  resp_head="$(mktemp)"
-  resp_body="$(mktemp)"
-
-  profile_id="balou419"
-
-  lurc \
-    -X "GET" \
-    -D "$resp_head" \
-    -H "content-type: application/json" \
-    "$_BASE_URL/profile/$profile_id"
-  > "$resp_body"
-
-  cat "$resp_body"
-  assert_status "$resp_head" 200
-}
-
 test_profile_upsert_204() {
   printf "test_profile_upsert_204\n"
   resp_head="$(mktemp)"
@@ -69,9 +51,28 @@ test_profile_upsert_204() {
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
-    --data "{'profileName': 'abi73'}" \
+    --data @./test/fixtures/profile.json \
     -D "$resp_head" \
     "$_BASE_URL/profile"
 
   assert_status "$resp_head" 204
 }
+
+
+# test_profile_read_200() {
+#   printf "test_profile_read_200\n"
+#   resp_head="$(mktemp)"
+#   resp_body="$(mktemp)"
+#
+#   profile_id="balou419"
+#
+#   lurc \
+#     -X "GET" \
+#     -D "$resp_head" \
+#     -H "content-type: application/json" \
+#     "$_BASE_URL/profile/$profile_id"
+#   > "$resp_body"
+#
+#   cat "$resp_body"
+#   assert_status "$resp_head" 200
+# }

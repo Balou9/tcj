@@ -165,5 +165,5 @@ jobs:
         run: |
           printf "[DEBUG] api base url: %s\n" "$_BASE_URL"
           source ./test/api_test.sh
-          test_profile_read_200
           test_profile_upsert_204
+#          test_profile_read_200
