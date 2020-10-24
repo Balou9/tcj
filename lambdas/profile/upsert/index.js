@@ -2,7 +2,7 @@ const AWS = require('aws-sdk')
 const { v4: uuidv4 } = require('uuid')
 const dynamodb = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'})
 
-module.exports.handler = function handler(event, context, callback) => {
+module.exports.handler = (event, context, callback) => {
 
   var params = {
     TableName: process.env.PROFILE_TABLE_NAME,
