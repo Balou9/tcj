@@ -9,7 +9,7 @@ module.exports.handler = (event, context, callback) => {
   } else {
 
     const params = {
-      TableName: process.env.MATCH_TABLE_NAME,
+      TableName: process.env.PROFILE_TABLE_NAME,
       Item: {
         "profile_id": profileId(),
         "profile": JSON.parse(event.body)
