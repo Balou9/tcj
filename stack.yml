@@ -11,6 +11,7 @@ Metadata:
       - Label:
           default: Storage
         Parameters:
+          - ProfileTableName
           - ProfileTableReadScalingMinCapacity
           - ProfileTableWriteScalingMinCapacity
       - Label:
@@ -74,6 +75,11 @@ Parameters:
     Description: Minimum write capacity units for autoscaling the profile table
     Type: Number
     Default: 1
+
+  ProfileTableName:
+    Description: Name for the profile table
+    AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
+    Type: String
 
 Resources:
 
@@ -310,7 +316,7 @@ Resources:
     Properties:
       Tags:
         - Key: "chale:name"
-          Value: !Sub profile-dynamo-table
+          Value: !Sub ProfileTableName
       AttributeDefinitions:
         -
           AttributeName: "profile_id"

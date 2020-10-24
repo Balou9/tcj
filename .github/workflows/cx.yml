@@ -68,6 +68,7 @@ jobs:
           echo "::set-env name=_STACK_NAME::chale-$_ENVIRONMENT"
           echo "::set-env name=_READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler"
           echo "::set-env name=_UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler"
+          echo "::set-env name=_PROFILE_TABLE_NAME::towertag-$_ENVIRONMENT-profiletable"
           echo "::set-output name=_stack_name::chale-$_ENVIRONMENT"
 
       - name: deploy the core stack
@@ -84,6 +85,7 @@ jobs:
               AccessLogRetentionInDays=${{ env.ACCESS_LOG_RETENTION_DAYS }} \
               ReadProfileHandlerName=${{ env._READ_PROFILE_HANDLER_NAME }} \
               UpsertProfileHandlerName=${{ env._UPSERT_PROFILE_HANDLER_NAME }} \
+              ProfileTableName=${{ env._PROFILE_TABLE_NAME }} \
               ProfileTableReadScalingMinCapacity=${{ env.PROFILE_TABLE_READ_SCALING_MIN_CAPACITY }} \
               ProfileTableWriteScalingMinCapacity=${{ env.PROFILE_TABLE_WRITE_SCALING_MIN_CAPACITY }} \
             --capabilities=CAPABILITY_NAMED_IAM \
