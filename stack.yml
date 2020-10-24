@@ -306,7 +306,7 @@ Resources:
           AttributeType: "S"
       KeySchema:
         -
-          AttributeName: "Profile_id"
+          AttributeName: "profile_id"
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: !Ref TableReadScalingMinCapacity
