@@ -4,6 +4,7 @@ const dynamodb = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'})
 
 module.exports.handler = (event, context, callback) => {
   console.log("DEBUG:::", event)
+
   if (!event.body || !event.body.length) {
     callback(null, response(400))
   } else {
