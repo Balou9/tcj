@@ -143,7 +143,6 @@ Resources:
       HttpMethod: PUT
       RequestParameters:
         method.request.header.content-type: True
-        # method.request.path.profileId: True
       RequestValidatorId: !Ref RequestValidator
       Integration:
         Type: AWS_PROXY
@@ -159,7 +158,7 @@ Resources:
         - StatusCode: "415"
         - StatusCode: "500"
         - StatusCode: "502"
-      ResourceId: !Ref ProfileResource
+      ResourceId: !Ref ProfileCollectionResource
       RestApiId: !Ref RestApi
 
   ReadProfileHandlerExecutionRole:
@@ -286,7 +285,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt UpsertProfileHandler.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*
 
   ApiGatewayAccount:
     Type: AWS::ApiGateway::Account

@@ -2,7 +2,7 @@ const AWS = require('aws-sdk')
 const { v4: uuidv4 } = require('uuid')
 const dynamodb = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'})
 
-module.exports.handler = async function handler(event, context) => {
+module.exports.handler = function handler(event, context, callback) => {
 
   var params = {
     TableName: process.env.PROFILE_TABLE_NAME,
@@ -12,8 +12,15 @@ module.exports.handler = async function handler(event, context) => {
     }
   }
 
-  await dynamodb.put(params).promise()
 
-  return { "statusCode": 204 }
+  var response = {
+    "statusCode": 204,
+    "headers": {
+      "content-type": "application/json",
+    },
+    "body": ''
+  }
+
+  callback(null, response)
 
 }
