@@ -9,12 +9,6 @@ Metadata:
         Parameters:
           - Environment
       - Label:
-          default: Storage
-        Parameters:
-          - ProfileTableName
-          - ProfileTableReadScalingMinCapacity
-          - ProfileTableWriteScalingMinCapacity
-      - Label:
           default: API
         Parameters:
           - ApiStageName
@@ -24,6 +18,12 @@ Metadata:
           - FunctionLogRetentionInDays
           - ReadProfileHandlerName
           - UpsertProfileHandlerName
+      - Label:
+          default: Storage
+        Parameters:
+          - TableReadScalingMinCapacity
+          - TableWriteScalingMinCapacity
+          - ProfileTableName
 
 Parameters:
   ApiStageName:
@@ -41,6 +41,11 @@ Parameters:
     AllowedPattern: "^(test|prod)$"
     Type: String
 
+  FunctionLogRetentionInDays:
+    Description: Lambda log retention in days
+    Type: Number
+    Default: 7
+
   FunctionMemorySize:
     Description: How many megabytes of ram to allocate for the lambda
     Type: Number
@@ -52,26 +57,21 @@ Parameters:
     Default: 3
 
   ReadProfileHandlerName:
-    Description: Lambda function name
+    Description: Lambda function name for the 'get profile' handler
     AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
     Type: String
 
   UpsertProfileHandlerName:
-    Description: Lambda function name
+    Description: Lambda function name for the 'upsert profile' handler
     AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
     Type: String
 
-  FunctionLogRetentionInDays:
-    Description: Lambda log retention in days
-    Type: Number
-    Default: 7
-
-  ProfileTableReadScalingMinCapacity:
+  TableReadScalingMinCapacity:
     Description: Minimum read capacity units for autoscaling the profile table
     Type: Number
     Default: 1
 
-  ProfileTableWriteScalingMinCapacity:
+  TableWriteScalingMinCapacity:
     Description: Minimum write capacity units for autoscaling the profile table
     Type: Number
     Default: 1
@@ -82,7 +82,6 @@ Parameters:
     Type: String
 
 Resources:
-
   RestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
@@ -113,18 +112,17 @@ Resources:
       PathPart: "{profile_id}"
       RestApiId: !Ref RestApi
 
-  ReadProfileMethod:
+  CreateReadProfileMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
       HttpMethod: GET
       RequestParameters:
-        method.request.path.profileId: True
+        method.request.path.profile_id: True
       RequestValidatorId: !Ref RequestValidator
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
-        ContentHandling: CONVERT_TO_BINARY
         Uri: !Sub
           - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ReadProfileHandlerArn}/invocations
           - ReadProfileHandlerArn: !GetAtt ReadProfileHandler.Arn
@@ -136,7 +134,7 @@ Resources:
       ResourceId: !Ref ProfileResource
       RestApiId: !Ref RestApi
 
-  UpsertProfileMethod:
+  CreateUpsertProfileMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -147,7 +145,6 @@ Resources:
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
-        ContentHandling: CONVERT_TO_BINARY
         Uri: !Sub
           - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UpsertProfileHandlerArn}/invocations
           - UpsertProfileHandlerArn: !GetAtt UpsertProfileHandler.Arn
@@ -166,7 +163,7 @@ Resources:
     Properties:
       Tags:
         - Key: "chale:name"
-          Value: !Sub ${ReadProfileHandlerName}-executionrole
+          Value: !Sub ${UpsertProfileHandlerName}-executionrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -187,6 +184,11 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
+              - Sid: AllowDynamoDBGetItemActions
+                Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                Resource: "*"
 
   UpsertProfileHandlerExecutionRole:
     Type: AWS::IAM::Role
@@ -214,11 +216,11 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
-              - Sid: AllowDynamoDbInteraction
+              - Sid: AllowDynamoDBPutItemActions
                 Effect: Allow
                 Action:
                   - dynamodb:PutItem
-                Resource: arn:aws:dynamodb:*:*:*
+                Resource: "*"
 
   ReadProfileHandler:
     Type: AWS::Lambda::Function
@@ -229,9 +231,12 @@ Resources:
       Code:
         ZipFile: // dummy
       FunctionName: !Ref ReadProfileHandlerName
+      Environment:
+        Variables:
+          PROFILE_TABLE_NAME: !Ref ProfileTable
+      Runtime: nodejs12.x
       Handler: index.handler
       Role: !GetAtt ReadProfileHandlerExecutionRole.Arn
-      Runtime: nodejs12.x
       MemorySize: !Ref FunctionMemorySize
       Timeout: !Ref FunctionTimeout
 
@@ -243,13 +248,13 @@ Resources:
           Value: !Ref UpsertProfileHandlerName
       Code:
         ZipFile: // dummy
+      FunctionName: !Ref UpsertProfileHandlerName
       Environment:
         Variables:
           PROFILE_TABLE_NAME: !Ref ProfileTable
-      FunctionName: !Ref UpsertProfileHandlerName
+      Runtime: nodejs12.x
       Handler: index.handler
       Role: !GetAtt UpsertProfileHandlerExecutionRole.Arn
-      Runtime: nodejs12.x
       MemorySize: !Ref FunctionMemorySize
       Timeout: !Ref FunctionTimeout
 
@@ -274,7 +279,8 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt ReadProfileHandler.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/*/*/*
+      # TODO : get rid of stars by hardcoding ...
 
   UpsertProfileHandlerPermission:
     Type: AWS::Lambda::Permission
@@ -286,29 +292,7 @@ Resources:
       FunctionName: !GetAtt UpsertProfileHandler.Arn
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*/*/*
-
-  ApiGatewayAccount:
-    Type: AWS::ApiGateway::Account
-    Properties:
-      CloudWatchRoleArn: !GetAtt ApiGatewayLoggingRole.Arn
-
-  ApiGatewayLoggingRole:
-    Type: AWS::IAM::Role
-    Properties:
-      Tags:
-        - Key: "chale:name"
-          Value: !Sub ${AWS::StackName}-apigateway-loggingrole
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Sid: AllowAssumeRoleByApiGateway
-            Effect: Allow
-            Principal:
-              Service: apigateway.amazonaws.com
-            Action: sts:AssumeRole
-      Path: /
-      ManagedPolicyArns:
-        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+      # TODO : get rid of stars by hardcoding ...
 
   ProfileTable:
     Type: AWS::DynamoDB::Table
@@ -322,16 +306,17 @@ Resources:
           AttributeType: "S"
       KeySchema:
         -
-          AttributeName: "profile_id"
+          AttributeName: "Profile_id"
           KeyType: HASH
       ProvisionedThroughput:
-        ReadCapacityUnits: !Ref ProfileTableReadScalingMinCapacity
-        WriteCapacityUnits: !Ref ProfileTableWriteScalingMinCapacity
+        ReadCapacityUnits: !Ref TableReadScalingMinCapacity
+        WriteCapacityUnits: !Ref TableWriteScalingMinCapacity
 
   Deployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
-      - ReadProfileMethod
+      - CreateReadProfileMethod
+      - CreateUpsertProfileMethod
     Properties:
       RestApiId: !Ref RestApi
 
@@ -361,6 +346,29 @@ Resources:
       RestApiId: !Ref RestApi
       StageName: !Ref ApiStageName
       TracingEnabled: False
+
+  ApiGatewayAccount:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn: !GetAtt ApiGatewayLoggingRole.Arn
+
+  ApiGatewayLoggingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Tags:
+        - Key: "chale:name"
+          Value: !Sub ${AWS::StackName}-apigateway-loggingrole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowAssumeRoleByApiGateway
+            Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+            Action: sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
 
 Outputs:
   ApiBaseURL:
