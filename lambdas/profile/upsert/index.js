@@ -1,15 +1,16 @@
-const { DynamoDB } = require("aws-sdk")
-const { v4: uuidv4 } = require("uuid")
+const { DynamoDB } = require("aws-sdk");
+const { v4: uuidv4 } = require("uuid");
 
 const dynamodb = new DynamoDB.DocumentClient({
   apiVersion: "2012-08-10"
 })
 
-module.exports.handler = (event, context, callback) => {
+module.exports.handler = async function handler (event, context) => {
   console.log("DEBUG:::", event)
 
   if (!event.body || !event.body.length) {
-    callback(null, response(400))
+    return { statusCode: 400 }
+    // callback(null, response(400))
   } else {
 
     const params = {
@@ -20,10 +21,18 @@ module.exports.handler = (event, context, callback) => {
       }
     }
 
-    dynamodb.put(params, function (err, data) {
-      if (err) callback(err)
-      else callback(null, response(204))
-    })
+    // dynamodb.put(params, function (err, data) {
+    //   if (err) callback(err)
+    //   return { statusCode: 204 }
+    //   else callback(null, response(204))
+    // })
+
+    try {
+      await dynamodb.put(params).promise()
+      return { statusCode: 204 }
+    } catch (err) {
+      return err
+    }
   }
 
 }
