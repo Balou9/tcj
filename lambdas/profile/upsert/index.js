@@ -12,8 +12,8 @@ module.exports.handler = (event, context, callback) => {
     const params = {
       TableName: process.env.PROFILE_TABLE_NAME,
       Item: {
-        "profile_id": profileId(),
-        "profile": JSON.parse(event.body)
+        "profile_id": uuidv4(),
+        "profile": event.body
       }
     }
 
@@ -23,11 +23,6 @@ module.exports.handler = (event, context, callback) => {
     })
   }
 
-}
-
-function profileId () {
-  var profile_ID = "mid_" + uuidv4()
-  return profile_ID
 }
 
 function response (status) {
