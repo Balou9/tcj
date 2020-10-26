@@ -1,6 +1,9 @@
-const AWS = require('aws-sdk')
-const { v4: uuidv4 } = require('uuid')
-const dynamodb = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'})
+const { DynamoDB } = require("aws-sdk")
+const { v4: uuidv4 } = require("uuid")
+
+const dynamodb = new DynamoDB.DocumentClient({
+  apiVersion: "2012-08-10"
+})
 
 module.exports.handler = (event, context, callback) => {
   console.log("DEBUG:::", event)
