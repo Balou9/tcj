@@ -27,9 +27,6 @@ module.exports.handler = (event, context, callback) => {
 
 function response (status) {
   return {
-    "statusCode": status,
-    "headers": {
-      "content-type": "application/json"
-    }
+    "statusCode": status
   }
 }
