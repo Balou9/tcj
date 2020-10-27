@@ -46,7 +46,6 @@ lurc() {
 test_profiles_upsert_204() {
   printf "test_profiles_upsert_204\n"
   resp_head="$(mktemp)"
-  resp_body="$(mktemp)"
 
   lurc \
     -X "PUT" \
@@ -61,14 +60,26 @@ test_profiles_upsert_204() {
 test_profiles_upsert_400_no_body() {
   printf "test_profiles_upsert_400_no_body/n"
   resp_head="$(mktemp)"
-  resp_body="$(mktemp)"
 
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
     -D "$resp_head" \
-    "$_BASE_URL/profiles" \
+    "$_BASE_URL/profiles"
 
   assert_status "$resp_head" 400
 }
-# --data @./test/fixtures/xxl_profile.json \
+
+test_profiles_upsert_413() {
+  printf "test_profiles_upsert_413/n"
+  resp_head="$(mktemp)"
+
+  lurc \
+    -X "PUT" \
+    -H "content-type: application/json" \
+    --data @./test/fixtures/xxl_profile.json \
+    -D "$resp_head" \
+    "$_BASE_URL/profiles"
+
+  assert_status "$resp_head" 413
+}
