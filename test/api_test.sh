@@ -57,22 +57,3 @@ test_profile_upsert_204() {
 
   assert_status "$resp_head" 204
 }
-
-
-# test_profile_read_200() {
-#   printf "test_profile_read_200\n"
-#   resp_head="$(mktemp)"
-#   resp_body="$(mktemp)"
-#
-#   profile_id="balou419"
-#
-#   lurc \
-#     -X "GET" \
-#     -D "$resp_head" \
-#     -H "content-type: application/json" \
-#     "$_BASE_URL/profile/$profile_id"
-#   > "$resp_body"
-#
-#   cat "$resp_body"
-#   assert_status "$resp_head" 200
-# }
