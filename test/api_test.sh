@@ -53,7 +53,7 @@ test_profile_upsert_204() {
     -H "content-type: application/json" \
     --data @./test/profile.json \
     -D "$resp_head" \
-    "$_BASE_URL/profile"
+    "$_BASE_URL/profiles"
 
   assert_status "$resp_head" 204
 }
@@ -67,7 +67,7 @@ test_profile_upsert_400_no_body() {
     -X "PUT" \
     -H "content-type: application/json" \
     -D "$resp_head" \
-    "$_BASE_URL/profile" \
+    "$_BASE_URL/profiles" \
 
   assert_status "$resp_head" 400
 }
