@@ -51,7 +51,7 @@ test_profiles_upsert_204() {
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
-    --data @./test/fixtures/profile.json \
+    --data @./test/fixtures/good_profile.json \
     -D "$resp_head" \
     "$_BASE_URL/profiles"
 
@@ -66,9 +66,9 @@ test_profiles_upsert_400_no_body() {
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
-    --data @./test/fixtures/xxl_profile.json \
     -D "$resp_head" \
     "$_BASE_URL/profiles" \
 
   assert_status "$resp_head" 400
 }
+# --data @./test/fixtures/xxl_profile.json \
