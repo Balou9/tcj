@@ -10,19 +10,17 @@ module.exports.handler = async function handler (event, context) => {
 
   if (!event.body || !event.body.length) {
     return { statusCode: 400 }
-  } else {
-
-    const params = {
-      TableName: process.env.PROFILE_TABLE_NAME,
-      Item: {
-        "profile_id": uuidv4(),
-        "profile": event.body
-      }
-    }
-
-    await dynamodb.put(params).promise()
-    return { statusCode: 204 }
-
   }
+
+  const params = {
+    TableName: process.env.PROFILE_TABLE_NAME,
+    Item: {
+      "profile_id": uuidv4(),
+      "profile": event.body
+    }
+  }
+
+  await dynamodb.put(params).promise()
+  return { statusCode: 204 }
 
 }
