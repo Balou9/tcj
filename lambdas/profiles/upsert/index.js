@@ -16,6 +16,8 @@ module.exports.handler = async function handler (event, context) {
     ? Buffer.from(event.body, "base64").toString("utf8")
     : event.body.toString("utf8")
 
+  console.log(strBody.length)
+
 
   if (strBody.length > 5120000) { // 5MiB
     return { statusCode: 413 };
