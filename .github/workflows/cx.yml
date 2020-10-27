@@ -65,17 +65,17 @@ jobs:
       - name: configure the environment
         id: configure_environment
         run: |
-          echo "::set-env name=_STACK_NAME::chale-$_ENVIRONMENT"
-          echo "::set-env name=_READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler"
-          echo "::set-env name=_UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler"
-          echo "::set-env name=_PROFILE_TABLE_NAME::towertag-$_ENVIRONMENT-profiletable"
+          echo "::set-env name=STACK_NAME::chale-$_ENVIRONMENT"
+          echo "::set-env name=READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler"
+          echo "::set-env name=UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler"
+          echo "::set-env name=PROFILE_TABLE_NAME::towertag-$_ENVIRONMENT-profiletable"
           echo "::set-output name=_stack_name::chale-$_ENVIRONMENT"
 
       - name: deploy the core stack
         run: |
           aws cloudformation deploy \
             --template-file=./stack.yml \
-            --stack-name=${{ env._STACK_NAME }} \
+            --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
               Environment=${{ env._ENVIRONMENT }} \
               ApiStageName=${{ env.API_STAGE_NAME }} \
@@ -83,43 +83,43 @@ jobs:
               FunctionTimeout=${{ env.FUNC_TIMEOUT}} \
               FunctionLogRetentionInDays=${{ env.FUNC_LOG_RETENTION_DAYS }} \
               AccessLogRetentionInDays=${{ env.ACCESS_LOG_RETENTION_DAYS }} \
-              ReadProfileHandlerName=${{ env._READ_PROFILE_HANDLER_NAME }} \
-              UpsertProfileHandlerName=${{ env._UPSERT_PROFILE_HANDLER_NAME }} \
-              ProfileTableName=${{ env._PROFILE_TABLE_NAME }} \
+              ReadProfileHandlerName=${{ env.READ_PROFILE_HANDLER_NAME }} \
+              UpsertProfileHandlerName=${{ env.UPSERT_PROFILE_HANDLER_NAME }} \
+              ProfileTableName=${{ env.PROFILE_TABLE_NAME }} \
               ProfileTableReadScalingMinCapacity=${{ env.PROFILE_TABLE_READ_SCALING_MIN_CAPACITY }} \
               ProfileTableWriteScalingMinCapacity=${{ env.PROFILE_TABLE_WRITE_SCALING_MIN_CAPACITY }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
-      - name: deploy the read profile handler
-        run: |
-          code_size=$( \
-            aws lambda get-function-configuration \
-              --function-name=${{ env._READ_PROFILE_HANDLER_NAME }} \
-              --query=CodeSize \
-          )
-          if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profile/read/*" || \
-             (( $code_size < 419 ));
-          then
-            cd ./lambdas/profile/read
-            npm ci --only=prod
-            cd ../../..
-            npx @zeit/ncc@0.22.3 build \
-              --external=aws-sdk \
-              --out=./lambdas/profile/bundles/read \
-              ./lambdas/profile/read/index.js
-            zip -j /tmp/bundle.zip ./lambdas/profile/bundles/read/index.js
-            aws lambda update-function-code \
-              --function-name=${{ env._READ_PROFILE_HANDLER_NAME }} \
-              --publish \
-              --zip-file=fileb:///tmp/bundle.zip
-          fi
+      # - name: deploy the read profile handler
+      #   run: |
+      #     code_size=$( \
+      #       aws lambda get-function-configuration \
+      #         --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
+      #         --query=CodeSize \
+      #     )
+      #     if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profile/read/*" || \
+      #        (( $code_size < 419 ));
+      #     then
+      #       cd ./lambdas/profile/read
+      #       npm ci --only=prod
+      #       cd ../../..
+      #       npx @zeit/ncc@0.22.3 build \
+      #         --external=aws-sdk \
+      #         --out=./lambdas/profile/bundles/read \
+      #         ./lambdas/profile/read/index.js
+      #       zip -j /tmp/bundle.zip ./lambdas/profile/bundles/read/index.js
+      #       aws lambda update-function-code \
+      #         --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
+      #         --publish \
+      #         --zip-file=fileb:///tmp/bundle.zip
+      #     fi
 
       - name: deploy the upsert profile handler
         run: |
           code_size=$( \
             aws lambda get-function-configuration \
-              --function-name=${{ env._UPSERT_PROFILE_HANDLER_NAME }} \
+              --function-name=${{ env.UPSERT_PROFILE_HANDLER_NAME }} \
               --query=CodeSize \
           )
           if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profile/upsert/*" || \
@@ -134,7 +134,7 @@ jobs:
               ./lambdas/profile/upsert/index.js
             zip -j /tmp/bundle.zip ./lambdas/profile/bundles/upsert/index.js
             aws lambda update-function-code \
-              --function-name=${{ env._UPSERT_PROFILE_HANDLER_NAME }} \
+              --function-name=${{ env.UPSERT_PROFILE_HANDLER_NAME }} \
               --publish \
               --zip-file=fileb:///tmp/bundle.zip
           fi
