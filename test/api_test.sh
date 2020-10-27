@@ -67,8 +67,7 @@ test_profile_upsert_400_no_body() {
     -X "PUT" \
     -H "content-type: application/json" \
     -D "$resp_head" \
-    "$BASE_URL/profile" \
-  > "$resp_body"
+    "$_BASE_URL/profile" \
 
   assert_status "$resp_head" 400
 }
