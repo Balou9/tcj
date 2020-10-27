@@ -5,7 +5,7 @@ const dynamodb = new DynamoDB.DocumentClient({
   apiVersion: "2012-08-10"
 })
 
-module.exports.handler = async function handler (event, context) => {
+module.exports.handler = async function handler (event, context) {
   console.log("DEBUG:::", event)
 
   if (!event.body || !event.body.length) {
