@@ -169,4 +169,4 @@ jobs:
           printf "[DEBUG] api base url: %s\n" "$_BASE_URL"
           source ./test/api_test.sh
           test_profile_upsert_204
-          test_profile_400_no_body
+          test_profile_upsert_400_no_body
