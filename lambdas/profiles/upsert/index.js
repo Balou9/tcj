@@ -16,7 +16,7 @@ module.exports.handler = async function handler (event, context) {
     ? Buffer.from(event.body, "base64").toString("utf8")
     : event.body.toString("utf8")
 
-  console.log(strBody.length)
+  console.log("DEBUG:::strBody length", strBody.length)
 
 
   if (strBody.length > 5120000) { // 5MiB

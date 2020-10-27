@@ -81,9 +81,8 @@ test_profiles_upsert_413() {
     --data @./test/fixtures/xxl_profile.json \
     -D "$resp_head" \
     "$_BASE_URL/profiles"
-    > "$resp_body"
+  > "$resp_body"
 
-    cat "$resp_body"
 
   assert_status "$resp_head" 413
 }
