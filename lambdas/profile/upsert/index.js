@@ -10,7 +10,6 @@ module.exports.handler = async function handler (event, context) => {
 
   if (!event.body || !event.body.length) {
     return { statusCode: 400 }
-    // callback(null, response(400))
   } else {
 
     const params = {
@@ -21,24 +20,9 @@ module.exports.handler = async function handler (event, context) => {
       }
     }
 
-    // dynamodb.put(params, function (err, data) {
-    //   if (err) callback(err)
-    //   return { statusCode: 204 }
-    //   else callback(null, response(204))
-    // })
+    await dynamodb.put(params).promise()
+    return { statusCode: 204 }
 
-    try {
-      await dynamodb.put(params).promise()
-      return { statusCode: 204 }
-    } catch (err) {
-      return err
-    }
   }
 
-}
-
-function response (status) {
-  return {
-    "statusCode": status
-  }
 }
