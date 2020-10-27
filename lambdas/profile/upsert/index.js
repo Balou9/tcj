@@ -24,3 +24,7 @@ module.exports.handler = async function handler (event, context) {
   return { statusCode: 204 }
 
 }
+
+if (!process.env.PROFILE_TABLE_NAME) {
+  throw new Error("missing required env var PROFILE_TABLE_NAME");
+}
