@@ -57,3 +57,18 @@ test_profile_upsert_204() {
 
   assert_status "$resp_head" 204
 }
+
+test_profile_upsert_400_no_body() {
+  printf "test_profile_upsert_400_no_body/n"
+  resp_head="$(mktemp)"
+  resp_body="$(mktemp)"
+
+  lurc \
+    -X "PUT" \
+    -H "content-type: application/json" \
+    -D "$resp_head" \
+    "$BASE_URL/profile" \
+  > "$resp_body"
+
+  assert_status "$resp_head" 400
+}
