@@ -43,29 +43,30 @@ lurc() {
   curl -s --proto '=https' --tlsv1.2 "$@"
 }
 
-test_profile_upsert_204() {
-  printf "test_profile_upsert_204\n"
+test_profiles_upsert_204() {
+  printf "test_profiles_upsert_204\n"
   resp_head="$(mktemp)"
   resp_body="$(mktemp)"
 
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
-    --data @./test/profile.json \
+    --data @./test/fixtures/profile.json \
     -D "$resp_head" \
     "$_BASE_URL/profiles"
 
   assert_status "$resp_head" 204
 }
 
-test_profile_upsert_400_no_body() {
-  printf "test_profile_upsert_400_no_body/n"
+test_profiles_upsert_400_no_body() {
+  printf "test_profiles_upsert_400_no_body/n"
   resp_head="$(mktemp)"
   resp_body="$(mktemp)"
 
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
+    --data @./test/fixtures/xxl_profile.json \
     -D "$resp_head" \
     "$_BASE_URL/profiles" \
 

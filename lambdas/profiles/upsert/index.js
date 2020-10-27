@@ -12,6 +12,15 @@ module.exports.handler = async function handler (event, context) {
     return { statusCode: 400 }
   }
 
+  const strBody = event.isBase64Encoded
+    ? Buffer.from(event.body, "base64").toString("utf8")
+    : event.body.toString("utf8")
+
+
+  if (strBody.length > 5120000) { // 5MiB
+    return { statusCode: 413 };
+  }
+
   const params = {
     TableName: process.env.PROFILE_TABLE_NAME,
     Item: {
