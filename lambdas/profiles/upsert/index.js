@@ -16,16 +16,22 @@ module.exports.handler = async function handler ({
     return { statusCode: 400 }
   }
 
+  const contentType = headers["content-type"]
+
+  if (!contentType || !contentType.startsWith("application/json")) {
+    return { statusCode: 415 }
+  }
+
   const strBody = isBase64Encoded
     ? Buffer.from(body, "base64").toString("utf8")
     : body.toString("utf8")
 
   console.log("DEBUG:::strBody length", strBody.length)
 
-
-  if (strBody.length > 5120000) { // 5MiB
-    return { statusCode: 413 };
-  }
+  // TODO:
+  // if (strBody.length > 5120000) { // 5MiB
+  //   return { statusCode: 413 };
+  // }
 
   const params = {
     TableName: process.env.PROFILE_TABLE_NAME,

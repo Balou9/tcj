@@ -85,3 +85,34 @@ test_profiles_upsert_400_no_body() {
 #
 #   assert_status "$resp_head" 413
 # }
+
+test_profiles_upsert_415_no_content_type() {
+  printf "test_profiles_upsert_415/n"
+
+  resp_head="$(mktemp)"
+  resp_body="$(mktemp)"
+
+  lurc \
+    -X "PUT" \
+    --data @./test/fixtures/good_profile.json \
+    -D "$resp_head" \
+    "$_BASE_URL/profiles"
+
+  assert_status "$resp_head" 415
+}
+
+test_profiles_upsert_415_unexpected_content_type() {
+  printf "test_profiles_upsert_415/n"
+
+  resp_head="$(mktemp)"
+  resp_body="$(mktemp)"
+
+  lurc \
+    -X "PUT" \
+    -H "content-type: application/xml" \
+    --data @./test/fixtures/good_profile.json \
+    -D "$resp_head" \
+    "$_BASE_URL/profiles"
+
+  assert_status "$resp_head" 415
+}
