@@ -5,16 +5,20 @@ const dynamodb = new DynamoDB.DocumentClient({
   apiVersion: "2012-08-10"
 })
 
-module.exports.handler = async function handler (event, context) {
+module.exports.handler = async function handler ({
+  headers,
+  body,
+  isBase64Encoded
+}) {
   console.log("DEBUG:::", event)
 
-  if (!event.body || !event.body.length) {
+  if (!body || !body.length) {
     return { statusCode: 400 }
   }
 
-  const strBody = event.isBase64Encoded
-    ? Buffer.from(event.body, "base64").toString("utf8")
-    : event.body.toString("utf8")
+  const strBody = isBase64Encoded
+    ? Buffer.from(body, "base64").toString("utf8")
+    : body.toString("utf8")
 
   console.log("DEBUG:::strBody length", strBody.length)
 
@@ -27,7 +31,7 @@ module.exports.handler = async function handler (event, context) {
     TableName: process.env.PROFILE_TABLE_NAME,
     Item: {
       "profile_id": uuidv4(),
-      "profile": event.body
+      "profile": body
     }
   }
 
