@@ -91,29 +91,29 @@ jobs:
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
-      # - name: deploy the read profile handler
-      #   run: |
-      #     code_size=$( \
-      #       aws lambda get-function-configuration \
-      #         --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
-      #         --query=CodeSize \
-      #     )
-      #     if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profiles/read/*" || \
-      #        (( $code_size < 419 ));
-      #     then
-      #       cd ./lambdas/profiles/read
-      #       npm ci --only=prod
-      #       cd ../../..
-      #       npx @zeit/ncc@0.22.3 build \
-      #         --external=aws-sdk \
-      #         --out=./lambdas/profiles/bundles/read \
-      #         ./lambdas/profiles/read/index.js
-      #       zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/read/index.js
-      #       aws lambda update-function-code \
-      #         --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
-      #         --publish \
-      #         --zip-file=fileb:///tmp/bundle.zip
-      #     fi
+      - name: deploy the read profile handler
+        run: |
+          code_size=$( \
+            aws lambda get-function-configuration \
+              --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
+              --query=CodeSize \
+          )
+          if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profiles/read/*" || \
+             (( $code_size < 419 ));
+          then
+            cd ./lambdas/profiles/read
+            npm ci --only=prod
+            cd ../../..
+            npx @zeit/ncc@0.22.3 build \
+              --external=aws-sdk \
+              --out=./lambdas/profiles/bundles/read \
+              ./lambdas/profiles/read/index.js
+            zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/read/index.js
+            aws lambda update-function-code \
+              --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
+              --publish \
+              --zip-file=fileb:///tmp/bundle.zip
+          fi
 
 
       - name: deploy the upsert profile handler
@@ -163,7 +163,10 @@ jobs:
               --output=text \
           )"
           echo "::set-env name=_BASE_URL::$api_base_url"
+
       - name: api testing
+        env:
+          TEST_PROFILE_ID: ${{ secrets.LAMBDA_TEST_PROFILE_ID }}
         run: |
           printf "[DEBUG] api base url: %s\n" "$_BASE_URL"
           source ./test/api_test.sh
@@ -171,3 +174,4 @@ jobs:
           test_profiles_upsert_400_no_body
           test_profiles_upsert_415_no_content_type
           test_profiles_upsert_415_unexpected_content_type
+          test_profiles_read_200
