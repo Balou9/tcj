@@ -123,8 +123,6 @@ test_profiles_read_200 () {
   resp_head="$(mktemp)"
   resp_body="$(mktemp)"
 
-  cat "$TEST_PROFILE_ID"
-
   profile_id="0c1a9b12-8459-43ea-80c5-0f07ac85b270"
 
   lurc \
