@@ -169,7 +169,7 @@ jobs:
           TEST_PROFILE_ID: ${{ secrets.LAMBDA_TEST_PROFILE_ID }}
         run: |
           printf "[DEBUG] api base url: %s\n" "$_BASE_URL"
-          printf "[DEBUG] api base url: %s\n" ${{ env.TEST_PROFILE_ID }}
+          printf "[DEBUG] profile_id to test with: %s\n" "$TEST_PROFILE_ID"
           source ./test/api_test.sh
           test_profiles_upsert_204
           test_profiles_upsert_400_no_body
