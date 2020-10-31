@@ -279,7 +279,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt ReadProfileHandler.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/GET/profiles/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/GET/profiles/{profile_id}
       # TODO : get rid of stars by hardcoding ...
 
   UpsertProfileHandlerPermission:
