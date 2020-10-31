@@ -1,12 +1,14 @@
 const AWS = require('aws-sdk')
 const dynamodb = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'})
 
-module.exports.handler = async function handler () {
+module.exports.handler = async function handler ({
+  pathParameters
+}) {
 
   const params = {
     TableName : process.env.PROFILE_TABLE_NAME,
     Key: {
-      "profile_id": event.pathParameters.profile_id
+      "profile_id": pathParameters.profile_id
     }
   }
 
