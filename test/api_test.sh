@@ -127,7 +127,7 @@ test_profiles_read_200 () {
 
   lurc \
     -X "GET" \
-    # -H "content-type: application/json" \
+    -H "content-type: application/json" \
     -D "$resp_head" \
     "$_BASE_URL/profiles/$profile_id"
   > "$resp_body"
