@@ -8,7 +8,7 @@ wip game
 - [ ] avoid pasting ids / use profileNames
 - [ ] think about best practices testing test_profiles_upsert_413
 - [ ] implement authenticiation / AWS Cognito
-- [ ] add test_documents_upsert_401 when authenticiation is impl
+- [ ] add test_profiles_upsert_401 when authenticiation is impl
 
 
 #### change_log
