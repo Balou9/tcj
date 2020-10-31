@@ -117,21 +117,21 @@ test_profiles_upsert_415_unexpected_content_type() {
   assert_status "$resp_head" 415
 }
 
-test_profiles_read_200 () {
-  printf "test_profiles_read_200"
-
-  resp_head="$(mktemp)"
-  resp_body="$(mktemp)"
-
-  cat "$TEST_PROFILE_ID"
-
-  # lurc \
-  #   -X "GET" \
-  #   -H "content-type: application/json" \
-  #   -D "$resp_head" \
-  #   "$_BASE_URL/profile/$profile_id"
-  # > "$resp_body"
-  #
-  # cat "$resp_body"
-  # assert_status "$resp_head" 200
-}
+# test_profiles_read_200 () {
+#   printf "test_profiles_read_200"
+#
+#   resp_head="$(mktemp)"
+#   resp_body="$(mktemp)"
+#
+#   cat "$TEST_PROFILE_ID"
+#
+#   # lurc \
+#   #   -X "GET" \
+#   #   -H "content-type: application/json" \
+#   #   -D "$resp_head" \
+#   #   "$_BASE_URL/profile/$profile_id"
+#   # > "$resp_body"
+#   #
+#   # cat "$resp_body"
+#   # assert_status "$resp_head" 200
+# }
