@@ -139,6 +139,8 @@ test_profiles_read_200 () {
 test_profiles_read_404 () {
   print "test_profiles_read_404/n"
 
+  profile_id="msmc"
+
   lurc \
     -X "GET" \
     -H "content-type: application/json" \
