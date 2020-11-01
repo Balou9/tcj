@@ -12,6 +12,8 @@ module.exports.handler = async function handler ({
     }
   }
 
+  console.log("DEBUG:::observe params", params)
+
   const data = await dynamodb.get(params).promise()
 
   return {
