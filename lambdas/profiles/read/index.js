@@ -16,6 +16,10 @@ module.exports.handler = async function handler ({
 
   const data = await dynamodb.get(params).promise()
 
+  if (!data || JSON.stringify(data) === "{}" ) {
+    return { statusCode: 404 }
+  }
+
   return {
     "statusCode": 200,
     "headers": {

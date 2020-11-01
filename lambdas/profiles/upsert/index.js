@@ -10,7 +10,7 @@ module.exports.handler = async function handler ({
   body,
   isBase64Encoded
 }) {
-  console.log("DEBUG:::", { headers, body, isBase64Encoded } )
+  // console.log("DEBUG:::", { headers, body, isBase64Encoded } )
 
   if (!body || !body.length) {
     return { statusCode: 400 }
