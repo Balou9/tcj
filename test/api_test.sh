@@ -118,7 +118,7 @@ test_profiles_upsert_415_unexpected_content_type() {
 }
 
 test_profiles_read_200 () {
-  printf "test_profiles_read_200"
+  printf "test_profiles_read_200/n"
 
   resp_head="$(mktemp)"
   resp_body="$(mktemp)"
@@ -134,4 +134,17 @@ test_profiles_read_200 () {
 
   cat "$resp_body"
   assert_status "$resp_head" 200
+}
+
+test_profiles_read_404 () {
+  print "test_profiles_read_404/n"
+
+  lurc \
+    -X "GET" \
+    -H "content-type: application/json" \
+    -D "$resp_head" \
+    "$_BASE_URL/profiles/$profile_id"
+  > "$resp_body"
+
+  assert_status "$resp_head" 404
 }
