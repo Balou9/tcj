@@ -117,7 +117,7 @@ test_profiles_upsert_415_unexpected_content_type() {
   assert_status "$resp_head" 415
 }
 
-test_profiles_read_200 () {
+test_profiles_read_200() {
   printf "test_profiles_read_200/n"
 
   resp_head="$(mktemp)"
@@ -136,8 +136,8 @@ test_profiles_read_200 () {
   assert_status "$resp_head" 200
 }
 
-test_profiles_read_404 () {
-  print "test_profiles_read_404/n"
+test_profiles_read_404() {
+  printf "test_profiles_read_404/n"
 
   profile_id="msmc"
 
