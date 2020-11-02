@@ -8,6 +8,7 @@ const dynamodb = new DynamoDB.DocumentClient({
 module.exports.handler = async function handler ({
   headers,
   body,
+  pathParameters,
   isBase64Encoded
 }) {
   // console.log("DEBUG:::", { headers, body, isBase64Encoded } )
