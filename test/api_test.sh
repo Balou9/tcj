@@ -43,29 +43,34 @@ lurc() {
   curl -s --proto '=https' --tlsv1.2 "$@"
 }
 
+
 test_profiles_upsert_204() {
   printf "test_profiles_upsert_204\n"
+
   resp_head="$(mktemp)"
+  profileName="balou914"
 
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
     --data @./test/fixtures/good_profile.json \
     -D "$resp_head" \
-    "$_BASE_URL/profiles"
+    "$_BASE_URL/profiles/$profileName"
 
   assert_status "$resp_head" 204
 }
 
 test_profiles_upsert_400_no_body() {
   printf "test_profiles_upsert_400_no_body/n"
+
   resp_head="$(mktemp)"
+  profileName="balou914"
 
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
     -D "$resp_head" \
-    "$_BASE_URL/profiles"
+    "$_BASE_URL/profiles/$profileName"
 
   assert_status "$resp_head" 400
 }
@@ -91,12 +96,13 @@ test_profiles_upsert_415_no_content_type() {
 
   resp_head="$(mktemp)"
   resp_body="$(mktemp)"
+  profileName="balou914"
 
   lurc \
     -X "PUT" \
     --data @./test/fixtures/good_profile.json \
     -D "$resp_head" \
-    "$_BASE_URL/profiles"
+    "$_BASE_URL/profiles/$profileName"
 
   assert_status "$resp_head" 415
 }
@@ -112,7 +118,7 @@ test_profiles_upsert_415_unexpected_content_type() {
     -H "content-type: application/xml" \
     --data @./test/fixtures/good_profile.json \
     -D "$resp_head" \
-    "$_BASE_URL/profiles"
+    "$_BASE_URL/profiles/$profileName"
 
   assert_status "$resp_head" 415
 }
@@ -123,13 +129,13 @@ test_profiles_read_200() {
   resp_head="$(mktemp)"
   resp_body="$(mktemp)"
 
-  profile_id="0c1a9b12-8459-43ea-80c5-0f07ac85b270"
+  profileName="balou914"
 
   lurc \
     -X "GET" \
     -H "content-type: application/json" \
     -D "$resp_head" \
-    "$_BASE_URL/profiles/$profile_id"
+    "$_BASE_URL/profiles/$profileName"
   > "$resp_body"
 
   cat "$resp_body"
@@ -139,13 +145,13 @@ test_profiles_read_200() {
 test_profiles_read_404() {
   printf "test_profiles_read_404/n"
 
-  profile_id="msmc"
+  profileName="msmc"
 
   lurc \
     -X "GET" \
     -H "content-type: application/json" \
     -D "$resp_head" \
-    "$_BASE_URL/profiles/$profile_id"
+    "$_BASE_URL/profiles/$profileName"
   > "$resp_body"
 
   assert_status "$resp_head" 404

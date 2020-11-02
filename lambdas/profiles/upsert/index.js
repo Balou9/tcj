@@ -36,7 +36,7 @@ module.exports.handler = async function handler ({
   const params = {
     TableName: process.env.PROFILE_TABLE_NAME,
     Item: {
-      "profile_id": uuidv4(),
+      "profileName": pathParameters.profileName,
       "profile": body
     }
   }

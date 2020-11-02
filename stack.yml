@@ -109,7 +109,7 @@ Resources:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !Ref ProfileCollectionResource
-      PathPart: "{profile_id}"
+      PathPart: "{profileName}"
       RestApiId: !Ref RestApi
 
   CreateReadProfileMethod:
@@ -118,7 +118,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: GET
       RequestParameters:
-        method.request.path.profile_id: True
+        method.request.path.profileName: True
       RequestValidatorId: !Ref RequestValidator
       Integration:
         Type: AWS_PROXY
@@ -155,7 +155,7 @@ Resources:
         - StatusCode: "415"
         - StatusCode: "500"
         - StatusCode: "502"
-      ResourceId: !Ref ProfileCollectionResource
+      ResourceId: !Ref ProfileResource
       RestApiId: !Ref RestApi
 
   ReadProfileHandlerExecutionRole:
@@ -279,7 +279,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt ReadProfileHandler.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/GET/profiles/{profile_id}
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/GET/profiles/{profileName}
 
   UpsertProfileHandlerPermission:
     Type: AWS::Lambda::Permission
@@ -290,7 +290,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt UpsertProfileHandler.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/PUT/profiles
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/PUT/profiles/{profileName}
 
   ProfileTable:
     Type: AWS::DynamoDB::Table
@@ -300,11 +300,11 @@ Resources:
           Value: !Sub ProfileTableName
       AttributeDefinitions:
         -
-          AttributeName: "profile_id"
+          AttributeName: "profileName"
           AttributeType: "S"
       KeySchema:
         -
-          AttributeName: "profile_id"
+          AttributeName: "profileName"
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: !Ref TableReadScalingMinCapacity

@@ -8,13 +8,11 @@ module.exports.handler = async function handler ({
   const params = {
     TableName : process.env.PROFILE_TABLE_NAME,
     Key: {
-      "profile_id": pathParameters.profile_id
+      "profileName": pathParameters.profileName
     }
   }
 
-  console.log("DEBUG:::observe params", params)
-
-  const data = await dynamodb.get(params).promise()
+  const payload = await dynamodb.get(params).promise()
 
   if (!data || JSON.stringify(data) === "{}" ) {
     return { statusCode: 404 }
@@ -25,7 +23,7 @@ module.exports.handler = async function handler ({
     "headers": {
       "content-type": "application/json",
     },
-    "body": JSON.stringify(data)
+    "body": JSON.stringify(payload)
   }
 
 }
