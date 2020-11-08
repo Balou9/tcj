@@ -18,6 +18,7 @@ Metadata:
           - FunctionLogRetentionInDays
           - ReadProfileHandlerName
           - UpsertProfileHandlerName
+          - DeleteProfileHandlerName
       - Label:
           default: Storage
         Parameters:
@@ -63,6 +64,11 @@ Parameters:
 
   UpsertProfileHandlerName:
     Description: Lambda function name for the 'upsert profile' handler
+    AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
+    Type: String
+
+  DeleteProfileHandlerName:
+    Description: Lambda function name for the 'delete profile' handler
     AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
     Type: String
 
@@ -112,7 +118,7 @@ Resources:
       PathPart: "{profileName}"
       RestApiId: !Ref RestApi
 
-  CreateReadProfileMethod:
+  ReadProfileMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -134,7 +140,7 @@ Resources:
       ResourceId: !Ref ProfileResource
       RestApiId: !Ref RestApi
 
-  CreateUpsertProfileMethod:
+  UpsertProfileMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -314,8 +320,8 @@ Resources:
   Deployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
-      - CreateReadProfileMethod
-      - CreateUpsertProfileMethod
+      - ReadProfileMethod
+      - UpsertProfileMethod
     Properties:
       RestApiId: !Ref RestApi
 
