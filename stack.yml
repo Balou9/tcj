@@ -18,7 +18,7 @@ Metadata:
           - FunctionLogRetentionInDays
           - ReadProfileHandlerName
           - UpsertProfileHandlerName
-          # - DeleteProfileHandlerName
+          - DeleteProfileHandlerName
       - Label:
           default: Storage
         Parameters:

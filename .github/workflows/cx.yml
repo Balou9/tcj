@@ -68,6 +68,7 @@ jobs:
           echo "::set-env name=STACK_NAME::chale-$_ENVIRONMENT"
           echo "::set-env name=READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler"
           echo "::set-env name=UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler"
+          echo "::set-env name=DELETE_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-deleteprofilehandler"
           echo "::set-env name=PROFILE_TABLE_NAME::towertag-$_ENVIRONMENT-profiletable"
           echo "::set-output name=_stack_name::chale-$_ENVIRONMENT"
 
@@ -85,6 +86,7 @@ jobs:
               AccessLogRetentionInDays=${{ env.ACCESS_LOG_RETENTION_DAYS }} \
               ReadProfileHandlerName=${{ env.READ_PROFILE_HANDLER_NAME }} \
               UpsertProfileHandlerName=${{ env.UPSERT_PROFILE_HANDLER_NAME }} \
+              DeleteProfileHandlerName=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
               ProfileTableName=${{ env.PROFILE_TABLE_NAME }} \
               ProfileTableReadScalingMinCapacity=${{ env.PROFILE_TABLE_READ_SCALING_MIN_CAPACITY }} \
               ProfileTableWriteScalingMinCapacity=${{ env.PROFILE_TABLE_WRITE_SCALING_MIN_CAPACITY }} \
@@ -136,6 +138,30 @@ jobs:
             zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/upsert/index.js
             aws lambda update-function-code \
               --function-name=${{ env.UPSERT_PROFILE_HANDLER_NAME }} \
+              --publish \
+              --zip-file=fileb:///tmp/bundle.zip
+          fi
+
+      - name: deploy the delete profile handler
+        run: |
+          code_size=$( \
+            aws lambda get-function-configuration \
+              --function-name=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
+              --query=CodeSize \
+          )
+          if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profiles/delete/*" || \
+             (( $code_size < 419 ));
+          then
+            cd ./lambdas/profiles/delete
+            npm ci --only=prod
+            cd ../../..
+            npx @zeit/ncc@0.22.3 build \
+              --external=aws-sdk \
+              --out=./lambdas/profiles/bundles/delete \
+              ./lambdas/profiles/delete/index.js
+            zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/delete/index.js
+            aws lambda update-function-code \
+              --function-name=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
               --publish \
               --zip-file=fileb:///tmp/bundle.zip
           fi
