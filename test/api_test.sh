@@ -156,3 +156,28 @@ test_profiles_read_404() {
 
   assert_status "$resp_head" 404
 }
+
+test_documents_delete_204 {
+  printf "test_profiles_read_204/n"
+
+  resp_head="$(mktemp)"
+
+  profileName="balou914"
+
+  lurc \
+    -X "PUT" \
+    -H "content-type: application/json" \
+    --data @./test/fixtures/good_profile.json \
+    -D "$resp_head" \
+    "$_BASE_URL/profiles/$profileName"
+
+
+  assert_status "$resp_head" 204
+
+  lurc \
+    -X "DELETE" \
+    -D "$resp_head" \
+    "$_BASE_URL/profiles/$profileName"
+
+    assert_status "$resp_head" 204
+}
