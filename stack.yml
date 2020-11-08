@@ -250,6 +250,38 @@ Resources:
                   - dynamodb:PutItem
                 Resource: "*"
 
+  DeleteProfileHandlerExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Tags:
+        - Key: "chale:name"
+          Value: !Sub ${DeleteProfileHandlerName}-executionrole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowAssumeRoleByLambda
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: DeleteProfileHandlerExecutionPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: AllowLogCreation
+                Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Sid: AllowDynamoDBPutItemActions
+                Effect: Allow
+                Action:
+                  - dynamodb:DeleteItem
+                Resource: "*"
+
   ReadProfileHandler:
     Type: AWS::Lambda::Function
     Properties:
