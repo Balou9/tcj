@@ -136,7 +136,7 @@ test_profiles_read_200() {
     -H "content-type: application/json" \
     -D "$resp_head" \
     "$_BASE_URL/profiles/$profileName"
-  > "$resp_body"
+  > "$resp_body"profileName
 
   cat "$resp_body"
   assert_status "$resp_head" 200
@@ -145,6 +145,7 @@ test_profiles_read_200() {
 test_profiles_read_404() {
   printf "test_profiles_read_404/n"
 
+  resp_head="$(mktemp)"
   profileName="msmc"
 
   lurc \
@@ -152,32 +153,30 @@ test_profiles_read_404() {
     -H "content-type: application/json" \
     -D "$resp_head" \
     "$_BASE_URL/profiles/$profileName"
-  > "$resp_body"
 
   assert_status "$resp_head" 404
 }
 
-test_documents_delete_204 {
-  printf "test_profiles_read_204/n"
+test_profiles_delete_204() {
+  printf "test_profiles_delete_204\n"
 
   resp_head="$(mktemp)"
 
-  profileName="balou914"
+  profile_id="balou914"
 
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
     --data @./test/fixtures/good_profile.json \
     -D "$resp_head" \
-    "$_BASE_URL/profiles/$profileName"
-
+    "$BASE_URL/profiles/$profileName"
 
   assert_status "$resp_head" 204
 
   lurc \
     -X "DELETE" \
     -D "$resp_head" \
-    "$_BASE_URL/profiles/$profileName"
+    "$BASE_URL/profiles/$profileName"
 
-    assert_status "$resp_head" 204
+  assert_status "$resp_head" 204
 }

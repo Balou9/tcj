@@ -200,4 +200,4 @@ jobs:
           test_profiles_upsert_415_unexpected_content_type
           test_profiles_read_200
           test_profiles_read_404
-          test_documents_delete_204
+          test_profiles_delete_204
