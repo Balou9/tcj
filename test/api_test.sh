@@ -162,21 +162,15 @@ test_profiles_delete_204() {
 
   resp_head="$(mktemp)"
 
-  profile_id="balou914"
+  profile_id="balou419"
 
   lurc \
     -X "PUT" \
     -H "content-type: application/json" \
     --data @./test/fixtures/good_profile.json \
     -D "$resp_head" \
-    "$BASE_URL/profiles/$profileName"
+    "$_BASE_URL/profiles/$profileName"
 
   assert_status "$resp_head" 204
 
-  lurc \
-    -X "DELETE" \
-    -D "$resp_head" \
-    "$BASE_URL/profiles/$profileName"
-
-  assert_status "$resp_head" 204
 }
