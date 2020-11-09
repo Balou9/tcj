@@ -165,7 +165,7 @@ test_profiles_delete_204() {
   profile_id="balou419"
 
   lurc \
-    -X "PUT" \
+    -X "DELETE" \
     -H "content-type: application/json" \
     --data @./test/fixtures/good_profile.json \
     -D "$resp_head" \
