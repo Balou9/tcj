@@ -179,10 +179,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: fetch stack outputs
+      - name: configure the test environment
         run: |
           echo "_stack_name=chale-$ENVIRONMENT" >> $GITHUB_ENV
-          
+
+      - name: fetch stack outputs
+        run: |
+
           api_base_url="$( \
             aws cloudformation describe-stacks \
               --stack-name="${{ env._stack_name }}" \
