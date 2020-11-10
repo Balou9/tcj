@@ -276,7 +276,7 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
-              - Sid: AllowDynamoDBPutItemActions
+              - Sid: AllowDynamoDbDeleteItemActions
                 Effect: Allow
                 Action:
                   - dynamodb:DeleteItem
