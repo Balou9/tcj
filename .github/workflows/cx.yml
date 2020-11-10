@@ -70,6 +70,9 @@ jobs:
           echo "UPSERT_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
           echo "DELETE_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
           echo "PROFILE_TABLE_NAME=chale-$ENVIRONMENT-profiletable" >> $GITHUB_ENV
+          echo "_stack_name=chale-$ENVIRONMENT" >> $GITHUB_ENV
+
+          echo $_stack_name
 
       - name: deploy the core stack
         run: |
@@ -179,16 +182,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: configure the test environment
-        run: |
-          echo "_stack_name=chale-$ENVIRONMENT" >> $GITHUB_ENV
-
       - name: fetch stack outputs
         run: |
 
+          echo $GITHUB_ENV
+
           api_base_url="$( \
             aws cloudformation describe-stacks \
-              --stack-name="${{ env._stack_name }}" \
+              --stack-name="${{ GITHUB_ENV.core }}" \
               --query="Stacks[0].Outputs[?OutputKey=='ApiBaseURL'].OutputValue" \
               --output=text \
           )"
