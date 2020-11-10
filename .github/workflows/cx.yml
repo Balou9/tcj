@@ -182,6 +182,9 @@ jobs:
 
       - name: fetch stack outputs
         run: |
+          cat {{ needs.deploy.outputs }}
+          cat $GITHUB_ENV
+
           api_base_url="$( \
             aws cloudformation describe-stacks \
               --stack-name="${{ needs.deploy.outputs._stack_name }}" \
