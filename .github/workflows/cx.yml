@@ -65,7 +65,7 @@ jobs:
       - name: configure the environment
         id: configure_environment
         run: |
-          echo "::set-env name=STACK_NAME::chale-$_ENVIRONMENT"
+          echo "STACK_NAME=chale-$_ENVIRONMENT" >> $GITHUB_ENV
           echo "::set-env name=READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler"
           echo "::set-env name=UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler"
           echo "::set-env name=DELETE_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-deleteprofilehandler"
