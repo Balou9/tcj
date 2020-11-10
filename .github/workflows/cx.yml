@@ -50,9 +50,9 @@ jobs:
       - name: map branch 2 test/prod
         run: |
           if [[ ${{ github.ref }} == *master ]]; then
-            echo ::set-env name=_ENVIRONMENT::test
+            echo "_ENVIRONMENT=test" >> $GITHUB_ENV
           else
-            echo ::set-env name=_ENVIRONMENT::test
+            echo "_ENVIRONMENT=test" >> $GITHUB_ENV
           fi
 
       - name: configure aws credentials
@@ -66,11 +66,11 @@ jobs:
         id: configure_environment
         run: |
           echo "STACK_NAME=chale-$_ENVIRONMENT" >> $GITHUB_ENV
-          echo "::set-env name=READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler"
-          echo "::set-env name=UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler"
-          echo "::set-env name=DELETE_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-deleteprofilehandler"
-          echo "::set-env name=PROFILE_TABLE_NAME::towertag-$_ENVIRONMENT-profiletable"
-          echo "::set-output name=_stack_name::chale-$_ENVIRONMENT"
+          echo "READ_PROFILE_HANDLER_NAME=chale-$_ENVIRONMENT-readprofilehandler" >> $GITHUB_ENV
+          echo "UPSERT_PROFILE_HANDLER_NAME=chale-$_ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
+          echo "DELETE_PROFILE_HANDLER_NAME=chale-$_ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
+          echo "PROFILE_TABLE_NAME::chale-$_ENVIRONMENT-profiletable" >> $GITHUB_ENV
+          echo "_stack_name=chale-$_ENVIRONMENT" >> $GITHUB_ENV
 
       - name: deploy the core stack
         run: |
@@ -188,7 +188,7 @@ jobs:
               --query="Stacks[0].Outputs[?OutputKey=='ApiBaseURL'].OutputValue" \
               --output=text \
           )"
-          echo "::set-env name=_BASE_URL::$api_base_url"
+          echo "_BASE_URL=$api_base_url" >> $GITHUB_ENV
 
       - name: api testing
         run: |
