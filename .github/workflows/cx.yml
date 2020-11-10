@@ -189,7 +189,7 @@ jobs:
 
           api_base_url="$( \
             aws cloudformation describe-stacks \
-              --stack-name="${{ GITHUB_ENV.core }}" \
+              --stack-name="${{ needs.deploy.outputs._stack_name }}" \
               --query="Stacks[0].Outputs[?OutputKey=='ApiBaseURL'].OutputValue" \
               --output=text \
           )"
