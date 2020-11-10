@@ -58,9 +58,9 @@ test_profiles_upsert_204() {
     --data @./test/fixtures/good_profile.json \
     -D "$resp_head" \
     "$_BASE_URL/profiles/$profileName"
-    > "$resp_body"
+  > "$resp_body"
 
-  cat $resp_body
+  cat "$resp_body"
   assert_status "$resp_head" 204
 }
 
@@ -140,7 +140,7 @@ test_profiles_read_200() {
     -H "content-type: application/json" \
     -D "$resp_head" \
     "$_BASE_URL/profiles/$profileName"
-  > "$resp_body"profileName
+  > "$resp_body"
 
   cat "$resp_body"
   assert_status "$resp_head" 200

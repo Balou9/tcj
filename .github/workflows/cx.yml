@@ -195,9 +195,9 @@ jobs:
           printf "[DEBUG] api base url: %s\n" "$_BASE_URL"
           source ./test/api_test.sh
           test_profiles_upsert_204
-          test_profiles_upsert_400_no_body
-          test_profiles_upsert_415_no_content_type
-          test_profiles_upsert_415_unexpected_content_type
-          test_profiles_read_200
-          test_profiles_read_404
-          test_profiles_delete_204
+#          test_profiles_upsert_400_no_body
+#          test_profiles_upsert_415_no_content_type
+#          test_profiles_upsert_415_unexpected_content_type
+#          test_profiles_read_200
+#          test_profiles_read_404
+#          test_profiles_delete_204
