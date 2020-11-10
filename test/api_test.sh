@@ -48,6 +48,8 @@ test_profiles_upsert_204() {
   printf "test_profiles_upsert_204\n"
 
   resp_head="$(mktemp)"
+  resp_body="$(mktemp)"
+
   profileName="balou914"
 
   lurc \
@@ -56,7 +58,9 @@ test_profiles_upsert_204() {
     --data @./test/fixtures/good_profile.json \
     -D "$resp_head" \
     "$_BASE_URL/profiles/$profileName"
+    > "$resp_body"
 
+  cat $resp_body
   assert_status "$resp_head" 204
 }
 
