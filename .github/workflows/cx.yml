@@ -50,9 +50,9 @@ jobs:
       - name: map branch 2 test/prod
         run: |
           if [[ ${{ github.ref }} == *master ]]; then
-            echo "_ENVIRONMENT=test" >> $GITHUB_ENV
+            echo "ENVIRONMENT=test" >> $GITHUB_ENV
           else
-            echo "_ENVIRONMENT=test" >> $GITHUB_ENV
+            echo "ENVIRONMENT=test" >> $GITHUB_ENV
           fi
 
       - name: configure aws credentials
@@ -65,12 +65,12 @@ jobs:
       - name: configure the environment
         id: configure_environment
         run: |
-          echo "STACK_NAME=chale-$_ENVIRONMENT" >> $GITHUB_ENV
-          echo "READ_PROFILE_HANDLER_NAME=chale-$_ENVIRONMENT-readprofilehandler" >> $GITHUB_ENV
-          echo "UPSERT_PROFILE_HANDLER_NAME=chale-$_ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
-          echo "DELETE_PROFILE_HANDLER_NAME=chale-$_ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
-          echo "PROFILE_TABLE_NAME=chale-$_ENVIRONMENT-profiletable" >> $GITHUB_ENV
-          echo "_stack_name=chale-$_ENVIRONMENT" >> $GITHUB_ENV
+          echo "STACK_NAME=chale-$ENVIRONMENT" >> $GITHUB_ENV
+          echo "READ_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-readprofilehandler" >> $GITHUB_ENV
+          echo "UPSERT_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
+          echo "DELETE_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
+          echo "PROFILE_TABLE_NAME=chale-$ENVIRONMENT-profiletable" >> $GITHUB_ENV
+          echo "_stack_name=chale-$ENVIRONMENT" >> $GITHUB_ENV
 
       - name: deploy the core stack
         run: |
@@ -78,7 +78,7 @@ jobs:
             --template-file=./stack.yml \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
-              Environment=${{ env._ENVIRONMENT }} \
+              Environment=${{ env.ENVIRONMENT }} \
               ApiStageName=${{ env.API_STAGE_NAME }} \
               FunctionMemorySize=${{ env.FUNC_MEMORY_SIZE }} \
               FunctionTimeout=${{ env.FUNC_TIMEOUT}} \
