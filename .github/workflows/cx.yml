@@ -185,7 +185,7 @@ jobs:
       - name: fetch stack outputs
         run: |
 
-          echo $GITHUB_ENV
+          echo $GITHUB_ENV.core
 
           api_base_url="$( \
             aws cloudformation describe-stacks \
