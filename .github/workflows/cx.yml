@@ -69,7 +69,7 @@ jobs:
           echo "READ_PROFILE_HANDLER_NAME=chale-$_ENVIRONMENT-readprofilehandler" >> $GITHUB_ENV
           echo "UPSERT_PROFILE_HANDLER_NAME=chale-$_ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
           echo "DELETE_PROFILE_HANDLER_NAME=chale-$_ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
-          echo "PROFILE_TABLE_NAME::chale-$_ENVIRONMENT-profiletable" >> $GITHUB_ENV
+          echo "PROFILE_TABLE_NAME=chale-$_ENVIRONMENT-profiletable" >> $GITHUB_ENV
           echo "_stack_name=chale-$_ENVIRONMENT" >> $GITHUB_ENV
 
       - name: deploy the core stack
