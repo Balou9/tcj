@@ -181,8 +181,6 @@ jobs:
 
       - name: fetch stack outputs
         run: |
-#          cat ${{ needs.deploy.outputs }}
-#          cat $GITHUB_ENV
           cat $_stack_name
 
           api_base_url="$( \
