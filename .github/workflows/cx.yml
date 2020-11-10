@@ -70,7 +70,6 @@ jobs:
           echo "UPSERT_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
           echo "DELETE_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
           echo "PROFILE_TABLE_NAME=chale-$ENVIRONMENT-profiletable" >> $GITHUB_ENV
-          echo "_stack_name=chale-$ENVIRONMENT" >> $GITHUB_ENV
 
       - name: deploy the core stack
         run: |
@@ -182,8 +181,9 @@ jobs:
 
       - name: fetch stack outputs
         run: |
-          cat {{ needs.deploy.outputs }}
-          cat $GITHUB_ENV
+#          cat ${{ needs.deploy.outputs }}
+#          cat $GITHUB_ENV
+          cat $_stack_name
 
           api_base_url="$( \
             aws cloudformation describe-stacks \
