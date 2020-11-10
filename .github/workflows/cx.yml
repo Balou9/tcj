@@ -181,11 +181,11 @@ jobs:
 
       - name: fetch stack outputs
         run: |
-          cat $_stack_name
-
+          echo "_stack_name=chale-$ENVIRONMENT" >> $GITHUB_ENV
+          
           api_base_url="$( \
             aws cloudformation describe-stacks \
-              --stack-name="${{ needs.deploy.outputs._stack_name }}" \
+              --stack-name="${{ env._stack_name }}" \
               --query="Stacks[0].Outputs[?OutputKey=='ApiBaseURL'].OutputValue" \
               --output=text \
           )"
