@@ -65,15 +65,17 @@ jobs:
       - name: configure the environment
         id: configure_environment
         run: |
-          echo "STACK_NAME::chale-$_ENVIRONMENT" << GITHUB_ENV
-          echo "READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler" << GITHUB_ENV
-          echo "UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler" << GITHUB_ENV
-          echo "DELETE_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-deleteprofilehandler" << GITHUB_ENV
-          echo "PROFILE_TABLE_NAME::chale-$_ENVIRONMENT-profiletable" << GITHUB_ENV
+          echo "STACK_NAME::chale-$_ENVIRONMENT" >> GITHUB_ENV
+          echo "READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler" >> GITHUB_ENV
+          echo "UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler" >> GITHUB_ENV
+          echo "DELETE_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-deleteprofilehandler" >> GITHUB_ENV
+          echo "PROFILE_TABLE_NAME::chale-$_ENVIRONMENT-profiletable" >> GITHUB_ENV
           echo "::set-output name=_stack_name::chale-$_ENVIRONMENT"
 
       - name: deploy the core stack
         run: |
+
+        printf "$STACK_NAME"
           aws cloudformation deploy \
             --template-file=./stack.yml \
             --stack-name=${{ env.STACK_NAME }} \
@@ -189,7 +191,7 @@ jobs:
               --query="Stacks[0].Outputs[?OutputKey=='ApiBaseURL'].OutputValue" \
               --output=text \
           )"
-          echo "_BASE_URL::$api_base_url" << GITHUB_ENV
+          echo "_BASE_URL::$api_base_url" >> GITHUB_ENV
 
       - name: api testing
         run: |
