@@ -66,9 +66,9 @@ jobs:
         id: configure_environment
         run: |
 
-          printf $ENVIRONMENT
-          
-          echo "STACK_NAME=chale-${{ env.ENVIRONMENT }}" >> GITHUB_ENV
+          $ENVIRONMENT
+
+          echo "STACK_NAME=chale-${{ $ENVIRONMENT }}" >> GITHUB_ENV
           echo "READ_PROFILE_HANDLER_NAME=chale-${{ env.ENVIRONMENT }}-readprofilehandler" >> GITHUB_ENV
           echo "UPSERT_PROFILE_HANDLER_NAME=chale-${{ env.ENVIRONMENT }}-upsertprofilehandler" >> GITHUB_ENV
           echo "DELETE_PROFILE_HANDLER_NAME=chale-${{ env.ENVIRONMENT }}-deleteprofilehandler" >> GITHUB_ENV
