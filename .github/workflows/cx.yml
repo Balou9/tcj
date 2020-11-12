@@ -75,11 +75,9 @@ jobs:
       - name: deploy the core stack
         run: |
 
-          printf ${{ env.STACK_NAME }}
-          
           aws cloudformation deploy \
             --template-file=./stack.yml \
-            --stack-name=${{ env.STACK_NAME }} \
+            --stack-name=$STACK_NAME \
             --parameter-overrides \
               Environment=${{ env.ENVIRONMENT }} \
               ApiStageName=${{ env.API_STAGE_NAME }} \
