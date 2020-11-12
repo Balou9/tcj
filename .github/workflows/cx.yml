@@ -49,7 +49,7 @@ jobs:
 
       - name: map branch 2 test/prod
         run: |
-          if [[ ${{ github.ref }} == *master ]]; then
+          if [[ ${{ github.ref }} == *main ]]; then
             echo "ENVIRONMENT=test" >> $GITHUB_ENV
           else
             echo "ENVIRONMENT=test" >> $GITHUB_ENV
@@ -65,14 +65,12 @@ jobs:
       - name: configure the environment
         id: configure_environment
         run: |
-          echo "::env name=STACK_NAME::chale-$_ENVIRONMENT"
-          echo "::env name=READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler"
-          echo "::env name=UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler"
-          echo "::env name=DELETE_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-deleteprofilehandler"
-          echo "::env name=PROFILE_TABLE_NAME::chale-$_ENVIRONMENT-profiletable"
+          echo "STACK_NAME::chale-$_ENVIRONMENT"
+          echo "READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler"
+          echo "UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler"
+          echo "DELETE_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-deleteprofilehandler"
+          echo "PROFILE_TABLE_NAME::chale-$_ENVIRONMENT-profiletable"
           echo "::set-output name=_stack_name::chale-$_ENVIRONMENT"
-
-          echo $_stack_name
 
       - name: deploy the core stack
         run: |
@@ -191,7 +189,7 @@ jobs:
               --query="Stacks[0].Outputs[?OutputKey=='ApiBaseURL'].OutputValue" \
               --output=text \
           )"
-          echo "::env name=_BASE_URL::$api_base_url"
+          echo "_BASE_URL::$api_base_url" << GITHUB_ENV
 
       - name: api testing
         run: |
