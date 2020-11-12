@@ -65,11 +65,11 @@ jobs:
       - name: configure the environment
         id: configure_environment
         run: |
-          echo "STACK_NAME::chale-$_ENVIRONMENT"
-          echo "READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler"
-          echo "UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler"
-          echo "DELETE_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-deleteprofilehandler"
-          echo "PROFILE_TABLE_NAME::chale-$_ENVIRONMENT-profiletable"
+          echo "STACK_NAME::chale-$_ENVIRONMENT" << GITHUB_ENV
+          echo "READ_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-readprofilehandler" << GITHUB_ENV
+          echo "UPSERT_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-upsertprofilehandler" << GITHUB_ENV
+          echo "DELETE_PROFILE_HANDLER_NAME::chale-$_ENVIRONMENT-deleteprofilehandler" << GITHUB_ENV
+          echo "PROFILE_TABLE_NAME::chale-$_ENVIRONMENT-profiletable" << GITHUB_ENV
           echo "::set-output name=_stack_name::chale-$_ENVIRONMENT"
 
       - name: deploy the core stack
