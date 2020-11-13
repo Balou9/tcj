@@ -168,19 +168,18 @@ test_profiles_delete_204() {
 
   profile_id="balou914"
 
-  # lurc \
-  #   -X "PUT" \
-  #   -H "content-type: application/json" \
-  #   --data @./test/fixtures/good_profile.json \
-  #   -D "$resp_head" \
-  #   "$_BASE_URL/profiles/$profileName"
-  #
-  # assert_status "$resp_head" 204
-
   lurc \
     -X "DELETE" \
     -D "$resp_head" \
     "$_BASE_URL/profiles/$profileName"
 
   assert_status "$resp_head" 204
+
+  lurc \
+    -X "GET" \
+    -H "content-type: application/json" \
+    -D "$resp_head" \
+    "$_BASE_URL/profiles/$profileName"
+
+  assert_status "$resp_head" 404
 }
