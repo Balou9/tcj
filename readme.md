@@ -5,7 +5,6 @@ wip game
 - [ ] impl: UpsertProfileHandler
 - [ ] impl: ReadProfleHandler
 
-- [ ] avoid pasting ids / use profileNames
 - [ ] think about best practice testing test_profiles_upsert_413
 
 
@@ -16,3 +15,4 @@ if authenticiation is required
 
 #### change_log
 - [x] switch from set-env to environment files
+- [x] avoid pasting ids / use profileNames
