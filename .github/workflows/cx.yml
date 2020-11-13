@@ -23,7 +23,7 @@ jobs:
       CFN_TEMPLATES: "stack.yml\n.github/cd_setup.yml\n"
     steps:
       - name: clone the repo
-        uses: actions/checkout@v2.3.1
+        uses: actions/checkout@v2.3.4
 
       - uses: aws-actions/configure-aws-credentials@v1.4.2
         with:
@@ -45,7 +45,7 @@ jobs:
       _stack_name: ${{ steps.configure_environment.outputs._stack_name }}
     steps:
       - name: clone the repo
-        uses: actions/checkout@v2.3.1
+        uses: actions/checkout@v2.3.4
 
       - name: map branch 2 test/prod
         run: |
@@ -174,9 +174,9 @@ jobs:
       - validate
       - deploy
     steps:
-      - uses: actions/checkout@v2.3.1
+      - uses: actions/checkout@v2.3.4
 
-      - uses: aws-actions/configure-aws-credentials@v1.4.2
+      - uses: aws-actions/configure-aws-credentials@v1.5.4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
