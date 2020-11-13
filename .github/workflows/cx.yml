@@ -185,7 +185,7 @@ jobs:
       - name: fetch stack outputs
         run: |
 
-        echo ${{ needs.deploy.outputs._stack_name }}
+          echo ${{ needs.deploy.outputs._stack_name }}
 
           api_base_url="$( \
             aws cloudformation describe-stacks \
