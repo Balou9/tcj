@@ -66,8 +66,6 @@ jobs:
         id: configure_environment
         run: |
 
-          $ENVIRONMENT
-
           echo "STACK_NAME=chale-$ENVIRONMENT" >> $GITHUB_ENV
           echo "READ_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-readprofilehandler" >> $GITHUB_ENV
           echo "UPSERT_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
@@ -186,6 +184,8 @@ jobs:
 
       - name: fetch stack outputs
         run: |
+
+        echo ${{ needs.deploy.outputs._stack_name }}
 
           api_base_url="$( \
             aws cloudformation describe-stacks \
