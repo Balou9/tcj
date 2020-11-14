@@ -128,7 +128,7 @@ jobs:
               --function-name=${{ env.UPSERT_PROFILE_HANDLER_NAME }} \
               --query=CodeSize \
           )
-          if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profiles/upsert/*" || \
+          if ! git diff HEAD HEAD~1 --exit-code -s "./lambdas/profiles/upsert/*" || \
              (( $code_size < 419 ));
           then
             cd ./lambdas/profiles/upsert
