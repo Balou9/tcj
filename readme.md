@@ -10,7 +10,7 @@ ___
 - [ ] impl: UpsertProfileHandler
 - [ ] impl: ReadProfleHandler
 - [ ] impl: DeleteProfileHandler
-
+- [ ] impl: use S3 instead of dynamo
 - [ ] think about best practice testing test_profiles_upsert_413
 
 
