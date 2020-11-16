@@ -67,12 +67,12 @@ jobs:
         id: configure_environment
         run: |
 
-          echo "STACK_NAME=chale-$ENVIRONMENT" >> $GITHUB_ENV
-          echo "READ_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-readprofilehandler" >> $GITHUB_ENV
-          echo "UPSERT_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
-          echo "DELETE_PROFILE_HANDLER_NAME=chale-$ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
-          echo "PROFILE_TABLE_NAME=chale-$ENVIRONMENT-profiletable" >> $GITHUB_ENV
-          echo "::set-output name=_stack_name::chale-$ENVIRONMENT"
+          echo "STACK_NAME=tcj-$ENVIRONMENT" >> $GITHUB_ENV
+          echo "READ_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-readprofilehandler" >> $GITHUB_ENV
+          echo "UPSERT_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
+          echo "DELETE_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
+          echo "PROFILE_TABLE_NAME=tcj-$ENVIRONMENT-profiletable" >> $GITHUB_ENV
+          echo "::set-output name=_stack_name::tcj-$ENVIRONMENT"
 
       - name: deploy the core stack
         run: |
@@ -103,7 +103,7 @@ jobs:
               --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
               --query=CodeSize \
           )
-          if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profiles/read/*" || \
+          if ! git diff HEAD HEAD~1 --exit-code -s "./lambdas/profiles/read/*" || \
              (( $code_size < 419 ));
           then
             cd ./lambdas/profiles/read
@@ -119,7 +119,6 @@ jobs:
               --publish \
               --zip-file=fileb:///tmp/bundle.zip
           fi
-
 
       - name: deploy the upsert profile handler
         run: |
@@ -152,7 +151,7 @@ jobs:
               --function-name=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
               --query=CodeSize \
           )
-          if ! git diff HEAD HEAD~1 -s --exit-code "./lambdas/profiles/delete/*" || \
+          if ! git diff HEAD HEAD~1 --exit-code -s "./lambdas/profiles/delete/*" || \
              (( $code_size < 419 ));
           then
             cd ./lambdas/profiles/delete

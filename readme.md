@@ -1,9 +1,14 @@
-### chale
-
+### tcj
 wip game
+
+**Trash Can Jam**  
+Remember the good old times in your classroom.  
+The clock has 3 seconds left... 3 ... 2 ... 1 DAGGER!!!
+___
 
 - [ ] impl: UpsertProfileHandler
 - [ ] impl: ReadProfleHandler
+- [ ] impl: DeleteProfileHandler
 
 - [ ] think about best practice testing test_profiles_upsert_413
 

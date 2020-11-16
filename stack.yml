@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: chale stack
+Description: tcj stack
 
 Metadata:
   AWS::Cloudformation::Interface:
@@ -93,7 +93,7 @@ Resources:
     Properties:
       Name: !Sub ${AWS::StackName}-restapi
       Tags:
-        - Key: "chale:name"
+        - Key: "tcj:name"
           Value: !Sub ${AWS::StackName}-restapi
 
   RequestValidator:
@@ -190,7 +190,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Tags:
-        - Key: "chale:name"
+        - Key: "tcj:name"
           Value: !Sub ${UpsertProfileHandlerName}-executionrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -222,7 +222,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Tags:
-        - Key: "chale:name"
+        - Key: "tcj:name"
           Value: !Sub ${UpsertProfileHandlerName}-executionrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -254,7 +254,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Tags:
-        - Key: "chale:name"
+        - Key: "tcj:name"
           Value: !Sub ${DeleteProfileHandlerName}-executionrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -286,7 +286,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Tags:
-        - Key: "chale:name"
+        - Key: "tcj:name"
           Value: !Ref ReadProfileHandlerName
       Code:
         ZipFile: // dummy
@@ -304,7 +304,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Tags:
-        - Key: "chale:name"
+        - Key: "tcj:name"
           Value: !Ref UpsertProfileHandlerName
       Code:
         ZipFile: // dummy
@@ -322,7 +322,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Tags:
-        - Key: "chale:name"
+        - Key: "tcj:name"
           Value: !Ref DeleteProfileHandlerName
       Code:
         ZipFile: // dummy
@@ -391,7 +391,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       Tags:
-        - Key: "chale:name"
+        - Key: "tcj:name"
           Value: !Sub ProfileTableName
       AttributeDefinitions:
         -
@@ -424,7 +424,7 @@ Resources:
     Type: AWS::ApiGateway::Stage
     Properties:
       Tags:
-        - Key: "chale:name"
+        - Key: "tcj:name"
           Value: !Sub ${AWS::StackName}-stage
       AccessLogSetting:
         DestinationArn: !GetAtt AccessLogGroup.Arn
@@ -450,7 +450,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Tags:
-        - Key: "chale:name"
+        - Key: "tcj:name"
           Value: !Sub ${AWS::StackName}-apigateway-loggingrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17

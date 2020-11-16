@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: |
-  Continuous deployment setup providing one user to maintain all Chale
+  Continuous deployment setup providing one user to maintain all Trash Can Jam
   stacks. This template's outputs provide the aws credentials that are
   prerequisites for performing the stack updates. Make sure to manually
   deploy this stack, then set the github secrets AWS_ACCESS_KEY_ID,
