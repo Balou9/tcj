@@ -167,7 +167,7 @@ test_profiles_delete_204() {
   resp_head="$(mktemp)"
   resp_body="$(mktemp)"
 
-  profile_id="balou914"
+  profileName="balou914"
 
   lurc \
     -X "DELETE" \
@@ -182,7 +182,7 @@ test_profiles_delete_204() {
     -D "$resp_head" \
     "$_BASE_URL/profiles/$profileName"
   > "$resp_body"
-  
+
   cat "$resp_body"
   assert_status "$resp_head" 404
 }
