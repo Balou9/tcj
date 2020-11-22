@@ -22,9 +22,10 @@ Metadata:
       - Label:
           default: Storage
         Parameters:
+          - PublicBucketName
+          - ProfileTableName
           - TableReadScalingMinCapacity
           - TableWriteScalingMinCapacity
-          - ProfileTableName
 
 Parameters:
   ApiStageName:
@@ -87,7 +88,60 @@ Parameters:
     AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
     Type: String
 
+  PublicBucketName:
+    Description: Name of the S3 bucket hosting public content
+    AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
+    Type: String
+
 Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      Tags:
+        - Key: "tcj:name"
+          Value: !Ref PublicBucketName
+      BucketName: !Ref PublicBucketName
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowOriginAccessIdentity
+            Effect: Allow
+            Principal:
+              CanonicalUser: !GetAtt OriginAccessIdentity.S3CanonicalUserId
+            Action:
+              - s3:Get*
+              - s3:List*
+            Resource:
+              - !GetAtt Bucket.Arn
+              - !Sub arn:aws:s3:::${Bucket}/*
+
+          - Sid: AllowReadProfileHandlerGetObject
+            Effect: Allow
+            Principal:
+              AWS: !GetAtt ReadProfileHandlerExecutionRole.Arn
+            Action: s3:GetObject
+            Resource: !Sub arn:aws:s3:::${Bucket}/*
+
+          - Sid: AllowUpsertProfileHandlerGetPutObject
+            Effect: Allow
+            Principal:
+              AWS: !GetAtt UpsertProfileHandlerExecutionRole.Arn
+            Action:
+              - s3:PutObject
+            Resource: !Sub arn:aws:s3:::${Bucket}/*
+
+          - Sid: AllowDeleteProfileHandlerGetPutObject
+            Effect: Allow
+            Principal:
+              AWS: !GetAtt DeleteProfileHandlerExecutionRole.Arn
+            Action:
+              - s3:DeleteObject
+            Resource: !Sub arn:aws:s3:::${Bucket}/*
   RestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
@@ -212,11 +266,11 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
-              - Sid: AllowDynamoDBGetItemActions
+
+              - Sid: AllowS3GetObject
                 Effect: Allow
-                Action:
-                  - dynamodb:GetItem
-                Resource: "*"
+                Action: s3:GetObject
+                Resource: !Sub arn:aws:s3:::{Bucket}/*
 
   UpsertProfileHandlerExecutionRole:
     Type: AWS::IAM::Role
@@ -244,11 +298,12 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
-              - Sid: AllowDynamoDBPutItemActions
+
+              - Sid: AllowS3PutObject
                 Effect: Allow
-                Action:
-                  - dynamodb:PutItem
-                Resource: "*"
+                Action: s3:PutObject
+                Resource: !Sub arn:aws:s3:::{Bucket}/*
+
 
   DeleteProfileHandlerExecutionRole:
     Type: AWS::IAM::Role
@@ -276,11 +331,13 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
-              - Sid: AllowDynamoDbDeleteItemActions
+
+              - Sid: AllowS3GetDeleteObject
                 Effect: Allow
                 Action:
-                  - dynamodb:DeleteItem
-                Resource: "*"
+                  - s3:GetObject
+                  - s3:DeleteObject
+                Resource: !Sub arn:aws:s3:::{Bucket}/*
 
   ReadProfileHandler:
     Type: AWS::Lambda::Function
@@ -293,7 +350,7 @@ Resources:
       FunctionName: !Ref ReadProfileHandlerName
       Environment:
         Variables:
-          PROFILE_TABLE_NAME: !Ref ProfileTable
+          BUCKET_NAME: !Ref Bucket
       Runtime: nodejs12.x
       Handler: index.handler
       Role: !GetAtt ReadProfileHandlerExecutionRole.Arn
@@ -311,7 +368,7 @@ Resources:
       FunctionName: !Ref UpsertProfileHandlerName
       Environment:
         Variables:
-          PROFILE_TABLE_NAME: !Ref ProfileTable
+          BUCKET_NAME: !Ref Bucket
       Runtime: nodejs12.x
       Handler: index.handler
       Role: !GetAtt UpsertProfileHandlerExecutionRole.Arn
@@ -329,7 +386,7 @@ Resources:
       FunctionName: !Ref DeleteProfileHandlerName
       Environment:
         Variables:
-          PROFILE_TABLE_NAME: !Ref ProfileTable
+          BUCKET_NAME: !Ref Bucket
       Runtime: nodejs12.x
       Handler: index.handler
       Role: !GetAtt DeleteProfileHandlerExecutionRole.Arn

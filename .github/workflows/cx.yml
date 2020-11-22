@@ -68,6 +68,7 @@ jobs:
         run: |
 
           echo "STACK_NAME=tcj-$ENVIRONMENT" >> $GITHUB_ENV
+          echo "PUBLIC_BUCKET_NAME=tcj-$ENVIRONMENT-public-bucket" >> $GITHUB_ENV
           echo "READ_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-readprofilehandler" >> $GITHUB_ENV
           echo "UPSERT_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
           echo "DELETE_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
@@ -81,6 +82,7 @@ jobs:
             --template-file=./stack.yml \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
+              PublicBucketName=${{ env.PUBLIC_BUCKET_NAME }} \
               Environment=${{ env.ENVIRONMENT }} \
               ApiStageName=${{ env.API_STAGE_NAME }} \
               FunctionMemorySize=${{ env.FUNC_MEMORY_SIZE }} \
@@ -199,9 +201,9 @@ jobs:
           printf "[DEBUG] api base url: %s\n" "$_BASE_URL"
           source ./test/api_test.sh
           test_profiles_upsert_204
-          test_profiles_upsert_400_no_body
-          test_profiles_upsert_415_no_content_type
-          test_profiles_upsert_415_unexpected_content_type
-          test_profiles_read_200
-          test_profiles_read_404
-          test_profiles_delete_204
+#          test_profiles_upsert_400_no_body
+#          test_profiles_upsert_415_no_content_type
+#          test_profiles_upsert_415_unexpected_content_type
+#          test_profiles_read_200
+#          test_profiles_read_404
+#          test_profiles_delete_204

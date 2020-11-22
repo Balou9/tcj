@@ -1,8 +1,6 @@
-const { DynamoDB } = require("aws-sdk");
-const { v4: uuidv4 } = require("uuid");
-
-const dynamodb = new DynamoDB.DocumentClient({
-  apiVersion: "2012-08-10"
+const { S3 } = require("aws-sdk");
+const s3 = new S3({
+  apiVersion: "2006-03-01"
 })
 
 module.exports.handler = async function handler ({
@@ -35,18 +33,18 @@ module.exports.handler = async function handler ({
   // }
 
   const params = {
-    TableName: process.env.PROFILE_TABLE_NAME,
-    Item: {
-      "profileName": pathParameters.profileName,
+    Bucket: process.env.BUCKET_NAME,
+    Key: pathParameters.profileName,
+    Body: {
       "profile": body
     }
   }
 
-  await dynamodb.put(params).promise()
+  await s3.putObject(params).promise()
   return { statusCode: 204 }
 
 }
 
-if (!process.env.PROFILE_TABLE_NAME) {
-  throw new Error("missing required env var PROFILE_TABLE_NAME");
+if (!process.env.BUCKET_NAME) {
+  throw new Error("missing required env var BUCKET_NAME");
 }
