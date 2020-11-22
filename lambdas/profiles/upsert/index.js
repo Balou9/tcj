@@ -36,7 +36,6 @@ module.exports.handler = async function handler ({
     Bucket: process.env.BUCKET_NAME,
     Key: pathParameters.profileName,
     Body: strBody
-
   }
 
   await s3.putObject(params).promise()
