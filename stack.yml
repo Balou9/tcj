@@ -450,24 +450,24 @@ Resources:
       FunctionName: !GetAtt DeleteProfileHandler.Arn
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/DELETE/profiles/{profileName}
-
-  ProfileTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      Tags:
-        - Key: "tcj:name"
-          Value: !Sub ProfileTableName
-      AttributeDefinitions:
-        -
-          AttributeName: "profileName"
-          AttributeType: "S"
-      KeySchema:
-        -
-          AttributeName: "profileName"
-          KeyType: HASH
-      ProvisionedThroughput:
-        ReadCapacityUnits: !Ref TableReadScalingMinCapacity
-        WriteCapacityUnits: !Ref TableWriteScalingMinCapacity
+  #
+  # ProfileTable:
+  #   Type: AWS::DynamoDB::Table
+  #   Properties:
+  #     Tags:
+  #       - Key: "tcj:name"
+  #         Value: !Sub ProfileTableName
+  #     AttributeDefinitions:
+  #       -
+  #         AttributeName: "profileName"
+  #         AttributeType: "S"
+  #     KeySchema:
+  #       -
+  #         AttributeName: "profileName"
+  #         KeyType: HASH
+  #     ProvisionedThroughput:
+  #       ReadCapacityUnits: !Ref TableReadScalingMinCapacity
+  #       WriteCapacityUnits: !Ref TableWriteScalingMinCapacity
 
   Deployment:
     Type: AWS::ApiGateway::Deployment

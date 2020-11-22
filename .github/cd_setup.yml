@@ -24,6 +24,7 @@ Resources:
                   - cloudfront:*
                   - logs:*
                   - dynamodb:*
+                  - s3:*
                 Resource: "*"
 
   AccessKey:
