@@ -36,7 +36,7 @@ module.exports.handler = async function handler ({
     Bucket: process.env.BUCKET_NAME,
     Key: pathParameters.profileName,
     Body: {
-      "profile": body
+      "profile": strBody
     }
   }
 
