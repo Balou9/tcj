@@ -94,6 +94,12 @@ Parameters:
     Type: String
 
 Resources:
+  OriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub ${AWS::StackName}-orghjn
+
   Bucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -142,6 +148,7 @@ Resources:
             Action:
               - s3:DeleteObject
             Resource: !Sub arn:aws:s3:::${Bucket}/*
+
   RestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
