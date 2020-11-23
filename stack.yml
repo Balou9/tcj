@@ -252,7 +252,7 @@ Resources:
     Properties:
       Tags:
         - Key: "tcj:name"
-          Value: !Sub ${UpsertProfileHandlerName}-executionrole
+          Value: !Sub ${ReadProfileHandlerName}-executionrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
