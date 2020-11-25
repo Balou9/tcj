@@ -133,20 +133,18 @@ Resources:
             Action: s3:GetObject
             Resource: !Sub arn:aws:s3:::${Bucket}/*
 
-          - Sid: AllowUpsertProfileHandlerGetPutObject
+          - Sid: AllowUpsertProfileHandlerPutObject
             Effect: Allow
             Principal:
               AWS: !GetAtt UpsertProfileHandlerExecutionRole.Arn
-            Action:
-              - s3:PutObject
+            Action: s3:PutObject
             Resource: !Sub arn:aws:s3:::${Bucket}/*
 
-          - Sid: AllowDeleteProfileHandlerGetPutObject
+          - Sid: AllowDeleteProfileHandlerDeleteObject
             Effect: Allow
             Principal:
               AWS: !GetAtt DeleteProfileHandlerExecutionRole.Arn
-            Action:
-              - s3:DeleteObject
+            Action: s3:DeleteObject
             Resource: !Sub arn:aws:s3:::${Bucket}/*
 
   RestApi:
