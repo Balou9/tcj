@@ -12,7 +12,9 @@ module.exports.handler = async function handler ({
     Key: pathParameters.profileName
   }
 
+  
   const payload = await s3.getObject(params).promise()
+  console.log("DEBUG:::", payload)
 
   if (!payload || JSON.stringify(payload) === "{}" ) {
     return { statusCode: 404 }
