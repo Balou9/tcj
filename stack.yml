@@ -274,7 +274,7 @@ Resources:
 
               - Sid: AllowS3GetObject
                 Effect: Allow
-                Action: s3:GetObject
+                Action: s3:* # TODO: narrow down permissions
                 Resource: !Sub arn:aws:s3:::{Bucket}/*
 
   UpsertProfileHandlerExecutionRole:
