@@ -7,7 +7,7 @@ module.exports.handler = async function handler ({
   pathParameters
 }) {
 
-  console.log("DEBUG:::", pathParameters)
+  console.log("DEBUG:::", { pathParameters })
 
   const params = {
     Bucket: process.env.BUCKET_NAME,
@@ -16,7 +16,7 @@ module.exports.handler = async function handler ({
 
 
   const payload = await s3.getObject(params).promise()
-  console.log("DEBUG:::", payload)
+  console.log("DEBUG:::", { payload })
 
   if (!payload || JSON.stringify(payload) === "{}" ) {
     return { statusCode: 404 }
