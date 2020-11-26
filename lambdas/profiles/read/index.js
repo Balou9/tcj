@@ -4,6 +4,8 @@ const s3 = new S3({
 })
 
 module.exports.handler = async function handler ({
+  headers,
+  body,
   pathParameters
 }) {
 
@@ -16,9 +18,16 @@ module.exports.handler = async function handler ({
 
 
   const payload = await s3.getObject(params).promise()
-  console.log("DEBUG:::", { payload })
 
   if (!payload || JSON.stringify(payload) === "{}" ) {
+    return { statusCode: 404 }
+  }
+
+  const keyExists = await exists(pathParameters.profileName).promise()
+
+  console.log("DEBUG:::", keyExists)
+
+  if (keyExists === "NotFound") {
     return { statusCode: 404 }
   }
 
@@ -30,6 +39,21 @@ module.exports.handler = async function handler ({
     "body": JSON.stringify(payload)
   }
 
+}
+
+
+async function exists(key) {
+  try {
+    await s3.headObject({ Key: key }).promise();
+
+    return true;
+  } catch (err) {
+    if (err.code === "NotFound") {
+      return false;
+    } else {
+      throw err;
+    }
+  }
 }
 
 if (!process.env.BUCKET_NAME) {
