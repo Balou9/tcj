@@ -23,7 +23,7 @@ module.exports.handler = async function handler ({
     return { statusCode: 404 }
   }
 
-  const keyExists = await exists(pathParameters.profileName).promise()
+  const keyExists = await exists(pathParameters.profileName)
 
   console.log("DEBUG:::", keyExists)
 
