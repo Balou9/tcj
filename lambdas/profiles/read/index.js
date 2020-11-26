@@ -9,13 +9,13 @@ module.exports.handler = async function handler ({
   pathParameters
 }) {
 
-  console.log("DEBUG:::", {
+  console.log("DEBUG:::",
     headers,
     body,
     pathParameters,
     process.env.BUCKET_NAME,
     typeof pathParameters.profileName
-  })
+  )
 
   const key = pathParameters.profileName
 
