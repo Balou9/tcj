@@ -126,7 +126,7 @@ Resources:
               - !GetAtt Bucket.Arn
               - !Sub arn:aws:s3:::${Bucket}/*
 
-          - Sid: AllowReadProfileHandlerGetObject
+          - Sid: AllowReadProfileHandlerGetHeadObject
             Effect: Allow
             Principal:
               AWS: !GetAtt ReadProfileHandlerExecutionRole.Arn

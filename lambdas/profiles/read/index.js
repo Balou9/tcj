@@ -5,16 +5,14 @@ const s3 = new S3({
 
 module.exports.handler = async function handler ({
   headers,
-  body,
   pathParameters
 }) {
 
   console.log("DEBUG:::",
     headers,
-    body,
     pathParameters,
-    process.env.BUCKET_NAME,
-    typeof pathParameters.profileName
+    typeof process.env.BUCKET_NAME,
+    pathParameters.profileName
   )
 
   const key = pathParameters.profileName
