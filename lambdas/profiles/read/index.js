@@ -9,22 +9,26 @@ module.exports.handler = async function handler ({
   pathParameters
 }) {
 
-  console.log("DEBUG:::", { headers, body, pathParameters } )
+  console.log("DEBUG:::", {
+    headers,
+    body,
+    pathParameters,
+    process.env.BUCKET_NAME,
+    typeof pathParameters.profileName
+  })
 
-  const params = {
+  const key = pathParameters.profileName
+
+  const payload = await s3.getObject({
     Bucket: process.env.BUCKET_NAME,
-    Key: pathParameters.profileName
-  }
-
-  console.log(params)
-
-  const payload = await s3.getObject(params).promise()
+    Key: key
+  }).promise()
 
   if (!payload || JSON.stringify(payload) === "{}" ) {
     return { statusCode: 404 }
   }
 
-  const keyExists = await exists(pathParameters.profileName)
+  const keyExists = await exists(key)
 
   console.log("DEBUG:::", keyExists)
 

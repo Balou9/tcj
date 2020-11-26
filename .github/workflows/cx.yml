@@ -96,8 +96,7 @@ jobs:
               ProfileTableReadScalingMinCapacity=${{ env.PROFILE_TABLE_READ_SCALING_MIN_CAPACITY }} \
               ProfileTableWriteScalingMinCapacity=${{ env.PROFILE_TABLE_WRITE_SCALING_MIN_CAPACITY }} \
             --capabilities=CAPABILITY_NAMED_IAM \
-            --no-fail-on-empty-changeset \
-            --debug
+            --no-fail-on-empty-changeset
 
       - name: deploy the read profile handler
         run: |
