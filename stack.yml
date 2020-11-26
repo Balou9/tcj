@@ -23,9 +23,6 @@ Metadata:
           default: Storage
         Parameters:
           - PublicBucketName
-          - ProfileTableName
-          - TableReadScalingMinCapacity
-          - TableWriteScalingMinCapacity
 
 Parameters:
   ApiStageName:
@@ -70,21 +67,6 @@ Parameters:
 
   DeleteProfileHandlerName:
     Description: Lambda function name for the 'delete profile' handler
-    AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
-    Type: String
-
-  TableReadScalingMinCapacity:
-    Description: Minimum read capacity units for autoscaling the profile table
-    Type: Number
-    Default: 1
-
-  TableWriteScalingMinCapacity:
-    Description: Minimum write capacity units for autoscaling the profile table
-    Type: Number
-    Default: 1
-
-  ProfileTableName:
-    Description: Name for the profile table
     AllowedPattern: "^[a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
     Type: String
 
@@ -448,24 +430,6 @@ Resources:
       FunctionName: !GetAtt DeleteProfileHandler.Arn
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/DELETE/profiles/{profileName}
-  #
-  # ProfileTable:
-  #   Type: AWS::DynamoDB::Table
-  #   Properties:
-  #     Tags:
-  #       - Key: "tcj:name"
-  #         Value: !Sub ProfileTableName
-  #     AttributeDefinitions:
-  #       -
-  #         AttributeName: "profileName"
-  #         AttributeType: "S"
-  #     KeySchema:
-  #       -
-  #         AttributeName: "profileName"
-  #         KeyType: HASH
-  #     ProvisionedThroughput:
-  #       ReadCapacityUnits: !Ref TableReadScalingMinCapacity
-  #       WriteCapacityUnits: !Ref TableWriteScalingMinCapacity
 
   Deployment:
     Type: AWS::ApiGateway::Deployment

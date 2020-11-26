@@ -9,8 +9,6 @@ env:
   FUNC_MEMORY_SIZE: 128
   FUNC_TIMEOUT: 5
   FUNC_LOG_RETENTION_DAYS: 7
-  PROFILE_TABLE_READ_SCALING_MIN_CAPACITY: 1
-  PROFILE_TABLE_WRITE_SCALING_MIN_CAPACITY: 1
 
 defaults:
   run:
@@ -68,11 +66,10 @@ jobs:
         run: |
 
           echo "STACK_NAME=tcj-$ENVIRONMENT" >> $GITHUB_ENV
-          echo "PUBLIC_BUCKET_NAME=tcj-$ENVIRONMENT-public-bucket" >> $GITHUB_ENV
           echo "READ_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-readprofilehandler" >> $GITHUB_ENV
           echo "UPSERT_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
           echo "DELETE_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
-          echo "PROFILE_TABLE_NAME=tcj-$ENVIRONMENT-profiletable" >> $GITHUB_ENV
+          echo "PUBLIC_BUCKET_NAME=tcj-$ENVIRONMENT-public-bucket" >> $GITHUB_ENV
           echo "::set-output name=_stack_name::tcj-$ENVIRONMENT"
 
       - name: deploy the core stack
@@ -92,9 +89,6 @@ jobs:
               ReadProfileHandlerName=${{ env.READ_PROFILE_HANDLER_NAME }} \
               UpsertProfileHandlerName=${{ env.UPSERT_PROFILE_HANDLER_NAME }} \
               DeleteProfileHandlerName=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
-              ProfileTableName=${{ env.PROFILE_TABLE_NAME }} \
-              ProfileTableReadScalingMinCapacity=${{ env.PROFILE_TABLE_READ_SCALING_MIN_CAPACITY }} \
-              ProfileTableWriteScalingMinCapacity=${{ env.PROFILE_TABLE_WRITE_SCALING_MIN_CAPACITY }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
