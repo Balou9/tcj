@@ -9,13 +9,14 @@ module.exports.handler = async function handler ({
   pathParameters
 }) {
 
-  console.log("DEBUG:::", { pathParameters })
+  console.log("DEBUG:::", { headers, body, pathParameters } )
 
   const params = {
     Bucket: process.env.BUCKET_NAME,
     Key: pathParameters.profileName
   }
 
+  console.log(params)
 
   const payload = await s3.getObject(params).promise()
 
