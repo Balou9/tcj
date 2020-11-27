@@ -65,12 +65,12 @@ jobs:
         id: configure_environment
         run: |
 
-          echo "STACK_NAME=tcj-$ENVIRONMENT" >> $GITHUB_ENV
-          echo "READ_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-readprofilehandler" >> $GITHUB_ENV
-          echo "UPSERT_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
-          echo "DELETE_PROFILE_HANDLER_NAME=tcj-$ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
-          echo "PUBLIC_BUCKET_NAME=tcj-$ENVIRONMENT-public-bucket" >> $GITHUB_ENV
-          echo "::set-output name=_stack_name::tcj-$ENVIRONMENT"
+          echo "STACK_NAME=tcjam-$ENVIRONMENT" >> $GITHUB_ENV
+          echo "READ_PROFILE_HANDLER_NAME=tcjam-$ENVIRONMENT-readprofilehandler" >> $GITHUB_ENV
+          echo "UPSERT_PROFILE_HANDLER_NAME=tcjam-$ENVIRONMENT-upsertprofilehandler" >> $GITHUB_ENV
+          echo "DELETE_PROFILE_HANDLER_NAME=tcjam-$ENVIRONMENT-deleteprofilehandler" >> $GITHUB_ENV
+          echo "PUBLIC_BUCKET_NAME=tcjam-$ENVIRONMENT-public-bucket" >> $GITHUB_ENV
+          echo "::set-output name=_stack_name::tcjam-$ENVIRONMENT"
 
       - name: deploy the core stack
         run: |
