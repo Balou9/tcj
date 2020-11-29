@@ -16,7 +16,6 @@ module.exports.handler = async function handler ({
 
   console.log("DEBUG:::",
     "HEADERS:::", headers,
-    "PATHPARAMS:::" pathParameters,
     "EVENT:::", event,
     "KEY:::", key,
     "BUCKET:::", bucket,
