@@ -4,33 +4,35 @@ const s3 = new S3({
 })
 
 module.exports.handler = async function handler ({
+  event,
   headers,
   pathParameters
 }) {
 
+  const key = pathParameters.profileName
+  const bucket = process.env.BUCKET_NAME
+
+  const keyExists = await exists(key)
+
   console.log("DEBUG:::",
-    headers,
-    pathParameters,
-    typeof process.env.BUCKET_NAME,
-    pathParameters.profileName
+    "HEADERS:::", headers,
+    "PATHPARAMS:::" pathParameters,
+    "EVENT:::", event,
+    "KEY:::", key,
+    "BUCKET:::", bucket,
+    "Key exists:::", keyExists
   )
 
-  const key = pathParameters.profileName
+  if (keyExists === "NotFound") {
+    return { statusCode: 404 }
+  }
 
-  const payload = await s3.getObject({
-    Bucket: process.env.BUCKET_NAME,
+  const await s3.getObject({
+    Bucket: bucket,
     Key: key
   }).promise()
 
   if (!payload || JSON.stringify(payload) === "{}" ) {
-    return { statusCode: 404 }
-  }
-
-  const keyExists = await exists(key)
-
-  console.log("DEBUG:::", keyExists)
-
-  if (keyExists === "NotFound") {
     return { statusCode: 404 }
   }
 
