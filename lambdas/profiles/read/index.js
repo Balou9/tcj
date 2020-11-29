@@ -27,7 +27,7 @@ module.exports.handler = async function handler ({
   }
 
   const payload = await s3.getObject({
-    Bucket: bucket,
+    Bucket: JSON.stringify(bucket),
     Key: key
   }).promise()
 
