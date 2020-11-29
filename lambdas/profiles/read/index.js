@@ -26,10 +26,12 @@ module.exports.handler = async function handler ({
     return { statusCode: 404 }
   }
 
-  const await s3.getObject({
+  const payload = await s3.getObject({
     Bucket: bucket,
     Key: key
   }).promise()
+
+  console.log(payload)
 
   if (!payload || JSON.stringify(payload) === "{}" ) {
     return { statusCode: 404 }
