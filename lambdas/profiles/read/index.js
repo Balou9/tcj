@@ -22,20 +22,16 @@ module.exports.handler = async function handler ({
     "Key exists:::", keyExists
   )
 
-  if (keyExists === "NotFound") {
-    return { statusCode: 404 }
-  }
-
   const payload = await s3.getObject({
-    Bucket: JSON.stringify(bucket),
-    Key: key
+    Bucket: process.env.BUCKET_NAME,
+    Key: pathParameters.profileName
   }).promise()
 
-  console.log(payload)
-
-  if (!payload || JSON.stringify(payload) === "{}" ) {
-    return { statusCode: 404 }
-  }
+  // console.log(payload)
+  //
+  // if (!payload || JSON.stringify(payload) === "{}" ) {
+  //   return { statusCode: 404 }
+  // }
 
   return {
     "statusCode": 200,
@@ -45,21 +41,6 @@ module.exports.handler = async function handler ({
     "body": JSON.stringify(payload)
   }
 
-}
-
-
-async function exists(key) {
-  try {
-    await s3.headObject({ Key: key }).promise();
-
-    return true;
-  } catch (err) {
-    if (err.code === "NotFound") {
-      return false;
-    } else {
-      throw err;
-    }
-  }
 }
 
 if (!process.env.BUCKET_NAME) {
