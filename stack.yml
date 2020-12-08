@@ -108,7 +108,7 @@ Resources:
               - !GetAtt Bucket.Arn
               - !Sub arn:aws:s3:::${Bucket}/*
 
-          - Sid: AllowReadProfileHandlerGetHeadObject
+          - Sid: AllowReadProfileHandlerGetObject
             Effect: Allow
             Principal:
               AWS: !GetAtt ReadProfileHandlerExecutionRole.Arn
@@ -319,11 +319,9 @@ Resources:
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
 
-              - Sid: AllowS3GetDeleteObject
+              - Sid: AllowS3DeleteObject
                 Effect: Allow
-                Action:
-                  - s3:GetObject
-                  - s3:DeleteObject
+                Action: s3:DeleteObject
                 Resource: !Sub arn:aws:s3:::{Bucket}/*
 
   ReadProfileHandler:
