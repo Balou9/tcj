@@ -5,7 +5,7 @@ const s3 = new S3({
 
 module.exports.handler = async function handler ({
   event,
-  context
+  context,
   headers,
   pathParameters
 }) {
