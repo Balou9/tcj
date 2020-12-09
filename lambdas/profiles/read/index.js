@@ -12,8 +12,7 @@ module.exports.handler = async function handler (event, context) {
   )
 
   const params = {
-    Bucket: process.env.BUCKET_NAME,
-    Key: pathParameters.profileName,
+    Key: event.pathParameters.profileName,
   }
 
   const payload = await s3.getObject(params).promise()
