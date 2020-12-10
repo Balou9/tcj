@@ -15,20 +15,27 @@ module.exports.handler = async function handler (event, context) {
     Key: event.pathParameters.profileName,
   }
 
-  const payload = await s3.getObject(params).promise()
+  // const payload = await s3.getObject(params).promise()
 
-  console.log("PAYLOAD:::", payload)
+  // console.log("PAYLOAD:::", payload)
 
-  if (!payload || JSON.stringify(payload) === "{}" ) {
-    return { statusCode: 404 }
-  }
+  // if (!payload || JSON.stringify(payload) === "{}" ) {
+  //   return { statusCode: 404 }
+  // }
 
-  return {
-    "statusCode": 200,
-    "headers": {
-      "content-type": "application/json",
-    },
-    "body": JSON.stringify(payload)
+
+  try {
+
+    const payload = await s3.getObject(params).promise()
+    return {
+      "statusCode": 200,
+      "headers": {
+        "content-type": "application/json",
+      },
+      "body": JSON.stringify(payload)
+    }
+  } catch (e) {
+    return { "error": e }
   }
 
 }
