@@ -115,6 +115,13 @@ Resources:
             Action: s3:GetObject
             Resource: !Sub arn:aws:s3:::${Bucket}/*
 
+          - Sid: AllowReadProfileHandlerListObject
+            Effect: Allow
+            Principal:
+              AWS: !GetAtt ReadProfileHandlerExecutionRole.Arn
+            Action: s3:ListBucket
+            Resource: !Sub arn:aws:s3:::${Bucket}
+
           - Sid: AllowUpsertProfileHandlerPutObject
             Effect: Allow
             Principal:
@@ -258,6 +265,11 @@ Resources:
                 Effect: Allow
                 Action: s3:GetObject
                 Resource: !Sub arn:aws:s3:::{Bucket}/*
+
+              - Sid: AllowS3ListBucket
+                Effect: Allow
+                Action: s3:ListBucket
+                Resource: !Sub arn:aws:s3:::{Bucket}
 
   UpsertProfileHandlerExecutionRole:
     Type: AWS::IAM::Role
