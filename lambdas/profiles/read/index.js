@@ -36,10 +36,10 @@ module.exports.handler = async function handler (event, context) {
       "body": JSON.stringify(payload)
     }
 
-  } catch (e) {
+  } catch (err) {
     return {
       "statusCode": err.code,
-      "body": e.message
+      "body": err.message
     }
   }
 
