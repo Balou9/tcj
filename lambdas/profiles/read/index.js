@@ -37,6 +37,11 @@ module.exports.handler = async function handler (event, context) {
     }
 
   } catch (err) {
+
+    if { err.code === "NoSuchKey" } {
+      return { "statusCode": 404 }
+    }
+
     return {
       "statusCode": err.code,
       "body": err.message
