@@ -23,8 +23,8 @@ module.exports.handler = async function handler (event, context) {
   try {
 
     const payload = await s3.getObject(params).promise()
-    console.log("DEBUG:::", JSON.stringify(payload))
-    // 
+    console.log("DEBUG:::", JSON.stringify(payload.body))
+    //
     // if (!payload || JSON.stringify(payload) === "{}" ) {
     //   return { statusCode: 404 }
     // }
