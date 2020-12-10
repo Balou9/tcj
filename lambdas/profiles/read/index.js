@@ -19,14 +19,16 @@ module.exports.handler = async function handler (event, context) {
 
   // console.log("PAYLOAD:::", payload)
 
-  // if (!payload || JSON.stringify(payload) === "{}" ) {
-  //   return { statusCode: 404 }
-  // }
-
 
   try {
 
     const payload = await s3.getObject(params).promise()
+    console.log("DEBUG:::", payload)
+
+    // if (!payload || JSON.stringify(payload) === "{}" ) {
+    //   return { statusCode: 404 }
+    // }
+
     return {
       "statusCode": 200,
       "headers": {
@@ -34,8 +36,9 @@ module.exports.handler = async function handler (event, context) {
       },
       "body": JSON.stringify(payload)
     }
+
   } catch (e) {
-    return { "error": e }
+    return e
   }
 
 }
