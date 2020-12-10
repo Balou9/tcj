@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: tcj stack
+Description: tcjam stack
 
 Metadata:
   AWS::Cloudformation::Interface:
@@ -86,7 +86,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       Tags:
-        - Key: "tcj:name"
+        - Key: "tcjam:name"
           Value: !Ref PublicBucketName
       BucketName: !Ref PublicBucketName
 
@@ -115,6 +115,13 @@ Resources:
             Action: s3:GetObject
             Resource: !Sub arn:aws:s3:::${Bucket}/*
 
+          - Sid: AllowReadProfileHandlerListObject
+            Effect: Allow
+            Principal:
+              AWS: !GetAtt ReadProfileHandlerExecutionRole.Arn
+            Action: s3:ListBucket
+            Resource: !Sub arn:aws:s3:::${Bucket}
+
           - Sid: AllowUpsertProfileHandlerPutObject
             Effect: Allow
             Principal:
@@ -134,7 +141,7 @@ Resources:
     Properties:
       Name: !Sub ${AWS::StackName}-restapi
       Tags:
-        - Key: "tcj:name"
+        - Key: "tcjam:name"
           Value: !Sub ${AWS::StackName}-restapi
 
   RequestValidator:
@@ -231,7 +238,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Tags:
-        - Key: "tcj:name"
+        - Key: "tcjam:name"
           Value: !Sub ${ReadProfileHandlerName}-executionrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -259,11 +266,16 @@ Resources:
                 Action: s3:GetObject
                 Resource: !Sub arn:aws:s3:::{Bucket}/*
 
+              - Sid: AllowS3ListBucket
+                Effect: Allow
+                Action: s3:ListBucket
+                Resource: !Sub arn:aws:s3:::{Bucket}
+
   UpsertProfileHandlerExecutionRole:
     Type: AWS::IAM::Role
     Properties:
       Tags:
-        - Key: "tcj:name"
+        - Key: "tcjam:name"
           Value: !Sub ${UpsertProfileHandlerName}-executionrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -296,7 +308,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Tags:
-        - Key: "tcj:name"
+        - Key: "tcjam:name"
           Value: !Sub ${DeleteProfileHandlerName}-executionrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -328,7 +340,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Tags:
-        - Key: "tcj:name"
+        - Key: "tcjam:name"
           Value: !Ref ReadProfileHandlerName
       Code:
         ZipFile: // dummy
@@ -346,7 +358,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Tags:
-        - Key: "tcj:name"
+        - Key: "tcjam:name"
           Value: !Ref UpsertProfileHandlerName
       Code:
         ZipFile: // dummy
@@ -364,7 +376,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Tags:
-        - Key: "tcj:name"
+        - Key: "tcjam:name"
           Value: !Ref DeleteProfileHandlerName
       Code:
         ZipFile: // dummy
@@ -448,7 +460,7 @@ Resources:
     Type: AWS::ApiGateway::Stage
     Properties:
       Tags:
-        - Key: "tcj:name"
+        - Key: "tcjam:name"
           Value: !Sub ${AWS::StackName}-stage
       AccessLogSetting:
         DestinationArn: !GetAtt AccessLogGroup.Arn
@@ -474,7 +486,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Tags:
-        - Key: "tcj:name"
+        - Key: "tcjam:name"
           Value: !Sub ${AWS::StackName}-apigateway-loggingrole
       AssumeRolePolicyDocument:
         Version: 2012-10-17

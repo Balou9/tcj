@@ -9,7 +9,6 @@ module.exports.handler = async function handler ({
   pathParameters,
   isBase64Encoded
 }) {
-  // console.log("DEBUG:::", { headers, body, isBase64Encoded } )
 
   if (!body || !body.length) {
     return { statusCode: 400 }
@@ -24,8 +23,6 @@ module.exports.handler = async function handler ({
   const strBody = isBase64Encoded
     ? Buffer.from(body, "base64").toString("utf8")
     : body.toString("utf8")
-
-  console.log("DEBUG:::strBody length", strBody.length)
 
   // TODO:
   // if (strBody.length > 5120000) { // 5MiB
