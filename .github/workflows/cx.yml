@@ -193,7 +193,7 @@ jobs:
       - name: api testing
         run: |
           source <(curl -sSf https://raw.githubusercontent.com/chiefbiiko/bashert/v1.0.1/bashert.sh)
-          source ./test/api_test.sh
+          source ./test/test_suite.sh
           test_profiles_upsert_204
           test_profiles_upsert_400_no_body
           test_profiles_upsert_415_no_content_type
