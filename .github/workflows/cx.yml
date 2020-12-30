@@ -92,30 +92,6 @@ jobs:
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
-      - name: deploy the read profile handler
-        run: |
-          code_size=$( \
-            aws lambda get-function-configuration \
-              --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
-              --query=CodeSize \
-          )
-          if ! git diff HEAD HEAD~1 --exit-code -s "./lambdas/profiles/read/*" || \
-             (( $code_size < 419 ));
-          then
-            cd ./lambdas/profiles/read
-            npm ci --only=prod
-            cd ../../..
-            npx @zeit/ncc@0.22.3 build \
-              --external=aws-sdk \
-              --out=./lambdas/profiles/bundles/read \
-              ./lambdas/profiles/read/index.js
-            zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/read/index.js
-            aws lambda update-function-code \
-              --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
-              --publish \
-              --zip-file=fileb:///tmp/bundle.zip
-          fi
-
       - name: deploy the upsert profile handler
         run: |
           code_size=$( \
@@ -140,29 +116,53 @@ jobs:
               --zip-file=fileb:///tmp/bundle.zip
           fi
 
-      - name: deploy the delete profile handler
-        run: |
-          code_size=$( \
-            aws lambda get-function-configuration \
-              --function-name=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
-              --query=CodeSize \
-          )
-          if ! git diff HEAD HEAD~1 --exit-code -s "./lambdas/profiles/delete/*" || \
-             (( $code_size < 419 ));
-          then
-            cd ./lambdas/profiles/delete
-            npm ci --only=prod
-            cd ../../..
-            npx @zeit/ncc@0.22.3 build \
-              --external=aws-sdk \
-              --out=./lambdas/profiles/bundles/delete \
-              ./lambdas/profiles/delete/index.js
-            zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/delete/index.js
-            aws lambda update-function-code \
-              --function-name=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
-              --publish \
-              --zip-file=fileb:///tmp/bundle.zip
-          fi
+      # - name: deploy the read profile handler
+      #   run: |
+      #     code_size=$( \
+      #       aws lambda get-function-configuration \
+      #         --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
+      #         --query=CodeSize \
+      #     )
+      #     if ! git diff HEAD HEAD~1 --exit-code -s "./lambdas/profiles/read/*" || \
+      #        (( $code_size < 419 ));
+      #     then
+      #       cd ./lambdas/profiles/read
+      #       npm ci --only=prod
+      #       cd ../../..
+      #       npx @zeit/ncc@0.22.3 build \
+      #         --external=aws-sdk \
+      #         --out=./lambdas/profiles/bundles/read \
+      #         ./lambdas/profiles/read/index.js
+      #       zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/read/index.js
+      #       aws lambda update-function-code \
+      #         --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
+      #         --publish \
+      #         --zip-file=fileb:///tmp/bundle.zip
+      #     fi
+      #
+      # - name: deploy the delete profile handler
+      #   run: |
+      #     code_size=$( \
+      #       aws lambda get-function-configuration \
+      #         --function-name=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
+      #         --query=CodeSize \
+      #     )
+      #     if ! git diff HEAD HEAD~1 --exit-code -s "./lambdas/profiles/delete/*" || \
+      #        (( $code_size < 419 ));
+      #     then
+      #       cd ./lambdas/profiles/delete
+      #       npm ci --only=prod
+      #       cd ../../..
+      #       npx @zeit/ncc@0.22.3 build \
+      #         --external=aws-sdk \
+      #         --out=./lambdas/profiles/bundles/delete \
+      #         ./lambdas/profiles/delete/index.js
+      #       zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/delete/index.js
+      #       aws lambda update-function-code \
+      #         --function-name=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
+      #         --publish \
+      #         --zip-file=fileb:///tmp/bundle.zip
+      #     fi
 
   test:
     runs-on: ubuntu-latest
@@ -194,10 +194,10 @@ jobs:
         run: |
           source <(curl -sSf https://raw.githubusercontent.com/chiefbiiko/bashert/v1.0.1/bashert.sh)
           source ./test/test_suite.sh
-          test_profiles_upsert_204
-          test_profiles_upsert_400_no_body
-          test_profiles_upsert_415_no_content_type
-          test_profiles_upsert_415_unexpected_content_type
-          test_profiles_read_200
-          test_profiles_read_404
+#          test_profiles_upsert_204
+#          test_profiles_upsert_400_no_body
+#          test_profiles_upsert_415_no_content_type
+#          test_profiles_upsert_415_unexpected_content_type
+#          test_profiles_read_200
+#          test_profiles_read_404
 #          test_profiles_delete_204

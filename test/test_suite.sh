@@ -1,21 +1,15 @@
 test_profiles_upsert_204() {
   printf "test_profiles_upsert_204\n"
-
-  resp_head="$(mktemp)"
   resp_body="$(mktemp)"
 
-  profileName="balou914"
+  aws lambda invoke \
+    --function-name tcjam-test-upsertprofilehandler \
+    --payload @.test/fixtures/profile.json \
+    $resp_body \
+  > /dev/null
 
-  lurc \
-    -X "PUT" \
-    -H "content-type: application/json" \
-    --data @./test/fixtures/good_profile.json \
-    -D "$resp_head" \
-    "$_BASE_URL/profiles/$profileName"
-  > "$resp_body"
-
-  cat "$resp_body"
-  assert_status "$resp_head" 204
+  status=$(cat $resp_body | jq .statusCode)
+  assert_equal $status 204
 }
 
 test_profiles_upsert_400_no_body() {
@@ -32,22 +26,6 @@ test_profiles_upsert_400_no_body() {
 
   assert_status "$resp_head" 400
 }
-
-# test_profiles_upsert_413() {
-#   printf "test_profiles_upsert_413/n"
-#   resp_head="$(mktemp)"
-#   resp_body="$(mktemp)"
-#
-#   lurc \
-#     -X "PUT" \
-#     -H "content-type: application/json" \
-#     --data @./test/fixtures/xxl_profile.json \
-#     -D "$resp_head" \
-#     "$_BASE_URL/profiles"
-#   > "$resp_body"
-#
-#   assert_status "$resp_head" 413
-# }
 
 test_profiles_upsert_415_no_content_type() {
   printf "test_profiles_upsert_415/n"
