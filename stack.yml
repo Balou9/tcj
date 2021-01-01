@@ -11,7 +11,6 @@ Metadata:
       - Label:
           default: API
         Parameters:
-          - ApiStageName
           - AccessLogRetentionInDays
           - FunctionMemorySize
           - FunctionTimeout
@@ -25,11 +24,6 @@ Metadata:
           - PublicBucketName
 
 Parameters:
-  ApiStageName:
-    Description: API stage name - integer version identifier
-    AllowedPattern: "^v[0-9]+$"
-    Type: String
-
   AccessLogRetentionInDays:
     Description: API access log retention in days
     Type: Number

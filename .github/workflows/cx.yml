@@ -4,7 +4,6 @@ on: push
 
 env:
   AWS_REGION: us-east-1
-  API_STAGE_NAME: "v0"
   ACCESS_LOG_RETENTION_DAYS: 7
   FUNC_MEMORY_SIZE: 128
   FUNC_TIMEOUT: 5
@@ -81,7 +80,6 @@ jobs:
             --parameter-overrides \
               PublicBucketName=${{ env.PUBLIC_BUCKET_NAME }} \
               Environment=${{ env.ENVIRONMENT }} \
-              ApiStageName=${{ env.API_STAGE_NAME }} \
               FunctionMemorySize=${{ env.FUNC_MEMORY_SIZE }} \
               FunctionTimeout=${{ env.FUNC_TIMEOUT}} \
               FunctionLogRetentionInDays=${{ env.FUNC_LOG_RETENTION_DAYS }} \
