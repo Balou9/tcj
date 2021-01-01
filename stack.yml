@@ -290,5 +290,5 @@ Resources:
   AccessLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub /aws/apigateway/${AWS::StackName}-api-${ApiStageName}
+      LogGroupName: !Sub /aws/apigateway/${AWS::StackName}-api-${Environment}
       RetentionInDays: !Ref AccessLogRetentionInDays
