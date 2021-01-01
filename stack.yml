@@ -298,39 +298,6 @@ Resources:
       LogGroupName: !Sub /aws/lambda/${DeleteProfileHandlerName}
       RetentionInDays: !Ref FunctionLogRetentionInDays
 
-  ReadProfileHandlerPermission:
-    Type: AWS::Lambda::Permission
-    DependsOn:
-      - RestApi
-      - ReadProfileHandler
-    Properties:
-      Action: lambda:InvokeFunction
-      FunctionName: !GetAtt ReadProfileHandler.Arn
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/GET/profiles/{profileName}
-
-  UpsertProfileHandlerPermission:
-    Type: AWS::Lambda::Permission
-    DependsOn:
-      - RestApi
-      - UpsertProfileHandler
-    Properties:
-      Action: lambda:InvokeFunction
-      FunctionName: !GetAtt UpsertProfileHandler.Arn
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/PUT/profiles/{profileName}
-
-  DeleteProfileHandlerPermission:
-    Type: AWS::Lambda::Permission
-    DependsOn:
-      - RestApi
-      - DeleteProfileHandler
-    Properties:
-      Action: lambda:InvokeFunction
-      FunctionName: !GetAtt DeleteProfileHandler.Arn
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/DELETE/profiles/{profileName}
-
   AccessLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
