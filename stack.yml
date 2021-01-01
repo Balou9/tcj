@@ -85,17 +85,6 @@ Resources:
       PolicyDocument:
         Version: 2012-10-17
         Statement:
-          - Sid: AllowOriginAccessIdentity
-            Effect: Allow
-            Principal:
-              CanonicalUser: !GetAtt OriginAccessIdentity.S3CanonicalUserId
-            Action:
-              - s3:Get*
-              - s3:List*
-            Resource:
-              - !GetAtt Bucket.Arn
-              - !Sub arn:aws:s3:::${Bucket}/*
-
           - Sid: AllowReadProfileHandlerGetObject
             Effect: Allow
             Principal:
