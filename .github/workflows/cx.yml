@@ -194,10 +194,8 @@ jobs:
         run: |
           source <(curl -sSf https://raw.githubusercontent.com/chiefbiiko/bashert/v1.0.1/bashert.sh)
           source ./test/test_suite.sh
-#          test_profiles_upsert_204
-#          test_profiles_upsert_400_no_body
-#          test_profiles_upsert_415_no_content_type
-#          test_profiles_upsert_415_unexpected_content_type
+          test_profiles_upsert_204
+          test_profiles_upsert_400
 #          test_profiles_read_200
 #          test_profiles_read_404
 #          test_profiles_delete_204

@@ -76,12 +76,6 @@ Parameters:
     Type: String
 
 Resources:
-  OriginAccessIdentity:
-    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-    Properties:
-      CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub ${AWS::StackName}-orghjn
-
   Bucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -135,104 +129,6 @@ Resources:
               AWS: !GetAtt DeleteProfileHandlerExecutionRole.Arn
             Action: s3:DeleteObject
             Resource: !Sub arn:aws:s3:::${Bucket}/*
-
-  RestApi:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: !Sub ${AWS::StackName}-restapi
-      Tags:
-        - Key: "tcjam:name"
-          Value: !Sub ${AWS::StackName}-restapi
-
-  RequestValidator:
-    Type: AWS::ApiGateway::RequestValidator
-    Properties:
-      Name: !Sub ${AWS::StackName}-requestvalidator
-      RestApiId: !Ref RestApi
-      ValidateRequestBody: True
-      ValidateRequestParameters: True
-
-  ProfileCollectionResource:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId: !GetAtt RestApi.RootResourceId
-      PathPart: profiles
-      RestApiId: !Ref RestApi
-
-  ProfileResource:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId: !Ref ProfileCollectionResource
-      PathPart: "{profileName}"
-      RestApiId: !Ref RestApi
-
-  ReadProfileMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      AuthorizationType: NONE
-      HttpMethod: GET
-      RequestParameters:
-        method.request.path.profileName: True
-      RequestValidatorId: !Ref RequestValidator
-      Integration:
-        Type: AWS_PROXY
-        IntegrationHttpMethod: POST
-        Uri: !Sub
-          - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ReadProfileHandlerArn}/invocations
-          - ReadProfileHandlerArn: !GetAtt ReadProfileHandler.Arn
-      MethodResponses:
-        - StatusCode: "200"
-        - StatusCode: "404"
-        - StatusCode: "500"
-        - StatusCode: "502"
-      ResourceId: !Ref ProfileResource
-      RestApiId: !Ref RestApi
-
-  UpsertProfileMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      AuthorizationType: NONE
-      HttpMethod: PUT
-      RequestParameters:
-        method.request.header.content-type: True
-        method.request.path.profileName: True
-      RequestValidatorId: !Ref RequestValidator
-      Integration:
-        Type: AWS_PROXY
-        IntegrationHttpMethod: POST
-        Uri: !Sub
-          - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UpsertProfileHandlerArn}/invocations
-          - UpsertProfileHandlerArn: !GetAtt UpsertProfileHandler.Arn
-      MethodResponses:
-        - StatusCode: "204"
-        - StatusCode: "400"
-        - StatusCode: "413"
-        - StatusCode: "415"
-        - StatusCode: "500"
-        - StatusCode: "502"
-      ResourceId: !Ref ProfileResource
-      RestApiId: !Ref RestApi
-
-  DeleteProfileMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      AuthorizationType: NONE
-      HttpMethod: DELETE
-      RequestParameters:
-        method.request.path.profileName: True
-      RequestValidatorId: !Ref RequestValidator
-      Integration:
-        Type: AWS_PROXY
-        IntegrationHttpMethod: POST
-        Uri: !Sub
-          - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteProfileHandlerArn}/invocations
-          - DeleteProfileHandlerArn: !GetAtt DeleteProfileHandler.Arn
-      MethodResponses:
-        - StatusCode: "204"
-        - StatusCode: "500"
-        - StatusCode: "502"
-      ResourceId: !Ref ProfileResource
-      RestApiId: !Ref RestApi
 
   ReadProfileHandlerExecutionRole:
     Type: AWS::IAM::Role
@@ -441,66 +337,8 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/${ApiStageName}/DELETE/profiles/{profileName}
 
-  Deployment:
-    Type: AWS::ApiGateway::Deployment
-    DependsOn:
-      - ReadProfileMethod
-      - UpsertProfileMethod
-      - DeleteProfileMethod
-    Properties:
-      RestApiId: !Ref RestApi
-
   AccessLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub /aws/apigateway/${AWS::StackName}-api-${ApiStageName}
       RetentionInDays: !Ref AccessLogRetentionInDays
-
-  Stage:
-    Type: AWS::ApiGateway::Stage
-    Properties:
-      Tags:
-        - Key: "tcjam:name"
-          Value: !Sub ${AWS::StackName}-stage
-      AccessLogSetting:
-        DestinationArn: !GetAtt AccessLogGroup.Arn
-        Format: '{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","caller":"$context.identity.caller","user":"$context.identity.user","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}'
-      DeploymentId: !Ref Deployment
-      MethodSettings:
-        - CachingEnabled: False
-          DataTraceEnabled: True
-          HttpMethod: "*"
-          LoggingLevel: INFO
-          MetricsEnabled: True
-          ResourcePath: "/*"
-      RestApiId: !Ref RestApi
-      StageName: !Ref ApiStageName
-      TracingEnabled: False
-
-  ApiGatewayAccount:
-    Type: AWS::ApiGateway::Account
-    Properties:
-      CloudWatchRoleArn: !GetAtt ApiGatewayLoggingRole.Arn
-
-  ApiGatewayLoggingRole:
-    Type: AWS::IAM::Role
-    Properties:
-      Tags:
-        - Key: "tcjam:name"
-          Value: !Sub ${AWS::StackName}-apigateway-loggingrole
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Sid: AllowAssumeRoleByApiGateway
-            Effect: Allow
-            Principal:
-              Service: apigateway.amazonaws.com
-            Action: sts:AssumeRole
-      Path: /
-      ManagedPolicyArns:
-        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
-
-Outputs:
-  ApiBaseURL:
-    Description: "API Base URL"
-    Value: !Sub https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/${ApiStageName}

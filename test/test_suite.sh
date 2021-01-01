@@ -4,7 +4,7 @@ test_profiles_upsert_204() {
 
   aws lambda invoke \
     --function-name tcjam-test-upsertprofilehandler \
-    --payload @.test/fixtures/profile.json \
+    --payload '{"profileName": "Bob"}' \
     $resp_body \
   > /dev/null
 
@@ -12,51 +12,18 @@ test_profiles_upsert_204() {
   assert_equal $status 204
 }
 
-test_profiles_upsert_400_no_body() {
-  printf "test_profiles_upsert_400_no_body/n"
-
-  resp_head="$(mktemp)"
-  profileName="balou914"
-
-  lurc \
-    -X "PUT" \
-    -H "content-type: application/json" \
-    -D "$resp_head" \
-    "$_BASE_URL/profiles/$profileName"
-
-  assert_status "$resp_head" 400
-}
-
-test_profiles_upsert_415_no_content_type() {
-  printf "test_profiles_upsert_415/n"
-
-  resp_head="$(mktemp)"
-  resp_body="$(mktemp)"
-  profileName="balou914"
-
-  lurc \
-    -X "PUT" \
-    --data @./test/fixtures/good_profile.json \
-    -D "$resp_head" \
-    "$_BASE_URL/profiles/$profileName"
-
-  assert_status "$resp_head" 415
-}
-
-test_profiles_upsert_415_unexpected_content_type() {
-  printf "test_profiles_upsert_415/n"
-
-  resp_head="$(mktemp)"
+test_profiles_upsert_400() {
+  printf "test_profiles_upsert_400/n"
   resp_body="$(mktemp)"
 
-  lurc \
-    -X "PUT" \
-    -H "content-type: application/xml" \
-    --data @./test/fixtures/good_profile.json \
-    -D "$resp_head" \
-    "$_BASE_URL/profiles/$profileName"
+  aws lambda invoke \
+    --function-name tcjam-test-upsertprofilehandler \
+    --payload '{}' \
+    $resp_body \
+  > /dev/null
 
-  assert_status "$resp_head" 415
+  status=$(cat $resp_body | jq .statusCode)
+  assert_status $status 400
 }
 
 test_profiles_read_200() {

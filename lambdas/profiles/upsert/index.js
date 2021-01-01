@@ -5,14 +5,14 @@ const s3 = new S3({
 
 module.exports.handler = async function (event, context) {
   try {
-    if (!event.profile) {
+    if (!event.profileName) {
       return { statusCode: 400 }
     }
 
     await s3.putObject({
-      Key: 'Bob',
+      Key: event.profileName,
       Bucket: process.env.BUCKET_NAME,
-      Body: event.profile
+      Body: { score: 0 }
     }).promise()
 
     return { statusCode: 204 }
