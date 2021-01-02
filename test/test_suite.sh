@@ -3,6 +3,7 @@ test_profiles_upsert_204() {
   resp_body="$(mktemp)"
 
   aws lambda invoke \
+    --cli-binary-format raw-in-base64-out \
     --function-name tcjam-test-upsertprofilehandler \
     --payload '{"profileName": "Bob"}' \
     $resp_body \
@@ -17,6 +18,7 @@ test_profiles_upsert_400() {
   resp_body="$(mktemp)"
 
   aws lambda invoke \
+    --cli-binary-format raw-in-base64-out \
     --function-name tcjam-test-upsertprofilehandler \
     --payload '{}' \
     $resp_body \
