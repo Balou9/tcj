@@ -4,7 +4,6 @@ test_profiles_upsert_204() {
   profile=$(base64 '{"profileName": "Bob"}')
 
   aws lambda invoke \
-    --cli-binary-format raw-in-base64-out \
     --function-name tcjam-test-upsertprofilehandler \
     --payload $profile \
     $resp_body \
@@ -20,7 +19,6 @@ test_profiles_upsert_400() {
   profile=$(base64 '{}')
 
   aws lambda invoke \
-    --cli-binary-format raw-in-base64-out \
     --function-name tcjam-test-upsertprofilehandler \
     --payload $profile \
     $resp_body \
