@@ -12,7 +12,7 @@ module.exports.handler = async function (event, context) {
     await s3.putObject({
       Key: event.profileName,
       Bucket: process.env.BUCKET_NAME,
-      Body: { score: 0 }
+      Body: JSON.stringify({ score: 0 })
     }).promise()
 
     return { statusCode: 204 }
