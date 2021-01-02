@@ -1,11 +1,10 @@
 test_profiles_upsert_204() {
   printf "test_profiles_upsert_204\n"
   resp_body="$(mktemp)"
-  profile=$(base64 '{"profileName": "Bob"}')
 
   aws lambda invoke \
     --function-name tcjam-test-upsertprofilehandler \
-    --payload $profile \
+    --payload '{"profileName": "Bob"}' \
     $resp_body \
   > /dev/null
 
@@ -16,11 +15,10 @@ test_profiles_upsert_204() {
 test_profiles_upsert_400() {
   printf "test_profiles_upsert_400/n"
   resp_body="$(mktemp)"
-  profile=$(base64 '{}')
 
   aws lambda invoke \
     --function-name tcjam-test-upsertprofilehandler \
-    --payload $profile \
+    --payload '{}' \
     $resp_body \
   > /dev/null
 
