@@ -1,14 +1,12 @@
 test_profiles_upsert_204() {
   printf "test_profiles_upsert_204\n"
   resp_body="$(mktemp)"
-  profile=$(cat <<EOF
-    {"profileName": "Bob"}
-EOF
-  )
+  echo '{"profileName": "Bob"}' > profile
+  openssl base64 -out base64_profile -in profile
 
   aws lambda invoke \
     --function-name tcjam-test-upsertprofilehandler \
-    --payload $profile \
+    --payload file://~/base64_profile \
     $resp_body \
   > /dev/null
 
