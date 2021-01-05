@@ -5,7 +5,7 @@ test_profiles_upsert_204() {
 
   aws lambda invoke \
     --function-name tcjam-test-upsertprofilehandler \
-    --payload "$profile" \
+    --payload fileb://profile \
     "$resp_body" \
   > /dev/null
 
