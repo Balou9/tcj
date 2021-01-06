@@ -10,5 +10,8 @@ test_profiles_upsert_204() {
   > /dev/null
 
   status=$(cat $resp_body | jq .statusCode)
+  err=$(cat $resp_body | jq .error)
+  echo "$err"
+  echo "$status"
   assert_equal $status 204
 }
