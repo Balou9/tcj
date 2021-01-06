@@ -73,7 +73,6 @@ jobs:
 
       - name: deploy the core stack
         run: |
-
           aws cloudformation deploy \
             --template-file=./stack.yml \
             --stack-name=${{ env.STACK_NAME }} \
