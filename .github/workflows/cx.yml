@@ -188,3 +188,5 @@ jobs:
           source <(curl -sSf https://raw.githubusercontent.com/chiefbiiko/bashert/v1.0.1/bashert.sh)
           source ./test_suite.sh
           test_profiles_upsert_204
+          test_profiles_upsert_400
+          test_profiles_upsert_500

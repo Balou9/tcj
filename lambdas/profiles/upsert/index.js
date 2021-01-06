@@ -1,6 +1,6 @@
-const { S3 } = require("aws-sdk");
+const { S3 } = require('aws-sdk')
 const s3 = new S3({
-  apiVersion: "2006-03-01"
+  apiVersion: '2006-03-01'
 })
 
 module.exports.handler = async function (event, context) {
@@ -8,7 +8,7 @@ module.exports.handler = async function (event, context) {
     if (!event.profileName) {
       return { statusCode: 400 }
     }
-
+    
     await s3.putObject({
       Key: JSON.stringify(event.profileName),
       Bucket: process.env.BUCKET_NAME,
@@ -17,9 +17,6 @@ module.exports.handler = async function (event, context) {
 
     return { statusCode: 204 }
   } catch (err) {
-    return {
-      statusCode: 500,
-      error: err
-    }
+    return { statusCode: 500 }
   }
 }
