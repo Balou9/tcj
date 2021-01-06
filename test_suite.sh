@@ -32,7 +32,7 @@ test_profiles_upsert_500() {
 
   aws lambda invoke \
     --function-name tcjam-test-upsertprofilehandler \
-    --payload '{"profileName": ">Bob"}' \
+    --payload '{"profileName": ">a)"}' \
     $resp_body \
   > /dev/null
 
