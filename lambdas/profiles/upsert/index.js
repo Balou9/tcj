@@ -17,6 +17,9 @@ module.exports.handler = async function (event, context) {
 
     return { statusCode: 204 }
   } catch (err) {
-    return { statusCode: 500 }
+    return {
+      statusCode: 500,
+      error: err
+    }
   }
 }
