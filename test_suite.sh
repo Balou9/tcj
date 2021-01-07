@@ -32,11 +32,10 @@ test_profiles_upsert_500() {
 
   aws lambda invoke \
     --function-name tcjam-test-upsertprofilehandler \
-    --payload '{"profileName":"^a)f"}' \
+    --payload '{"profileName":"<a}f"}' \
     $resp_body \
   > /dev/null
 
   status=$(cat $resp_body | jq .statusCode)
-
   assert_equal $status 500
 }
