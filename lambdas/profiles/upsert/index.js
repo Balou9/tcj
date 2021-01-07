@@ -8,9 +8,9 @@ module.exports.handler = async function (event, context) {
     if (!event.profileName) {
       return { statusCode: 400 }
     }
-    
+
     await s3.putObject({
-      Key: JSON.stringify(event.profileName),
+      Key: event.profileName,
       Bucket: process.env.BUCKET_NAME,
       Body: JSON.stringify({ score: 0 })
     }).promise()
