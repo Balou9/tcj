@@ -45,22 +45,11 @@ test_profiles_read_200() {
   resp_body="$(mktemp)"
 
   aws lambda invoke \
-    --function-name tcjam-test-upsertprofilehandler \
-    --payload '{"profileName":"Bob"}' \
-    $resp_body \
-  > /dev/null
-
-  status=$(cat $resp_body | jq .statusCode)
-  assert_equal $status 204
-
-  resp_body="$(mktemp)"
-
-  aws lambda invoke \
     --function-name tcjam-test-readprofilehandler \
     --payload '{"profileName":"Bob"}' \
     $resp_body \
   > /dev/null
 
   status=$(cat $resp_body | jq .statusCode)
-  assert_equal $status 204
+  assert_equal $status 200
 }
