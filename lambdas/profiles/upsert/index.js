@@ -1,6 +1,7 @@
 const { S3 } = require('aws-sdk')
 const s3 = new S3({
-  apiVersion: '2006-03-01'
+  apiVersion: "2006-03-01",
+  params: { Bucket: process.env.BUCKET_NAME }
 })
 
 module.exports.handler = async function (event, context) {
@@ -11,7 +12,6 @@ module.exports.handler = async function (event, context) {
 
     await s3.putObject({
       Key: event.profileName,
-      Bucket: process.env.BUCKET_NAME,
       Body: JSON.stringify({ score: 0 })
     }).promise()
 

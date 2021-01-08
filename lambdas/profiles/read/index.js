@@ -4,37 +4,24 @@ const s3 = new S3({
   params: { Bucket: process.env.BUCKET_NAME }
 })
 
-module.exports.handler = async function handler (event, context) {
-  const params = {
-    Key: event.pathParameters.profileName,
-  }
-
+module.exports.handler = async function (event, context) {
   try {
-
-    const payload = await s3.getObject(params).promise()
-
-    return {
-      "statusCode": 200,
-      "headers": {
-        "content-type": "application/json",
-      },
-      "body": JSON.stringify(payload)
+    if (!event.profileName) {
+      return { statusCode: 400 }
     }
 
-  } catch (err) {
+    const payload = await s3.getObject({
+      Key: event.profileName
+    }).promise()
 
+    return {
+      statusCode: 200,
+      body: JSON.stringify(payload)
+    }
+  } catch (err) {
     if ( err.code === "NoSuchKey" ) {
       return { "statusCode": 404 }
     }
-
-    return {
-      "statusCode": err.code,
-      "body": err.message
-    }
-
+    return { statusCode: 500 }
   }
-}
-
-if (!process.env.BUCKET_NAME) {
-  throw new Error("missing required env var BUCKET_NAME");
 }

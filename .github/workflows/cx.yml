@@ -109,30 +109,30 @@ jobs:
               --zip-file=fileb:///tmp/bundle.zip
           fi
 
-      # - name: deploy the read profile handler
-      #   run: |
-      #     code_size=$( \
-      #       aws lambda get-function-configuration \
-      #         --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
-      #         --query=CodeSize \
-      #     )
-      #     if ! git diff HEAD HEAD~1 --exit-code -s "./lambdas/profiles/read/*" || \
-      #        (( $code_size < 419 ));
-      #     then
-      #       cd ./lambdas/profiles/read
-      #       npm ci --only=prod
-      #       cd ../../..
-      #       npx @zeit/ncc@0.22.3 build \
-      #         --external=aws-sdk \
-      #         --out=./lambdas/profiles/bundles/read \
-      #         ./lambdas/profiles/read/index.js
-      #       zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/read/index.js
-      #       aws lambda update-function-code \
-      #         --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
-      #         --publish \
-      #         --zip-file=fileb:///tmp/bundle.zip
-      #     fi
-      #
+      - name: deploy the read profile handler
+        run: |
+          code_size=$( \
+            aws lambda get-function-configuration \
+              --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
+              --query=CodeSize \
+          )
+          if ! git diff HEAD HEAD~1 --exit-code -s "./lambdas/profiles/read/*" || \
+             (( $code_size < 419 ));
+          then
+            cd ./lambdas/profiles/read
+            npm ci --only=prod
+            cd ../../..
+            npx @zeit/ncc@0.22.3 build \
+              --external=aws-sdk \
+              --out=./lambdas/profiles/bundles/read \
+              ./lambdas/profiles/read/index.js
+            zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/read/index.js
+            aws lambda update-function-code \
+              --function-name=${{ env.READ_PROFILE_HANDLER_NAME }} \
+              --publish \
+              --zip-file=fileb:///tmp/bundle.zip
+          fi
+
       # - name: deploy the delete profile handler
       #   run: |
       #     code_size=$( \
@@ -190,3 +190,4 @@ jobs:
           test_profiles_upsert_204
           test_profiles_upsert_400
 #          test_profiles_upsert_500
+          test_profiles_read_200
