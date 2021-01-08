@@ -190,3 +190,5 @@ jobs:
           test_profiles_upsert_204
           test_profiles_upsert_400
           test_profiles_read_200
+          test_profiles_read_400
+          test_profiles_read_404

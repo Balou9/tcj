@@ -53,3 +53,31 @@ test_profiles_read_200() {
   status=$(cat $resp_body | jq .statusCode)
   assert_equal $status 200
 }
+
+test_profiles_read_400() {
+  printf "test_profiles_read_400\n"
+  resp_body="$(mktemp)"
+
+  aws lambda invoke \
+    --function-name tcjam-test-readprofilehandler \
+    --payload '{}' \
+    $resp_body \
+  > /dev/null
+
+  status=$(cat $resp_body | jq .statusCode)
+  assert_equal $status 400
+}
+
+test_profiles_read_404() {
+  printf "test_profiles_read_404\n"
+  resp_body="$(mktemp)"
+
+  aws lambda invoke \
+    --function-name tcjam-test-readprofilehandler \
+    --payload '{"profileName":"Alice"}' \
+    $resp_body \
+  > /dev/null
+
+  status=$(cat $resp_body | jq .statusCode)
+  assert_equal $status 404
+}
