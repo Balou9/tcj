@@ -25,17 +25,17 @@ test_profiles_upsert_400() {
   status=$(cat $resp_body | jq .statusCode)
   assert_equal $status 400
 }
-
-test_profiles_upsert_500() {
-  printf "test_profiles_upsert_500\n"
-  resp_body="$(mktemp)"
-
-  aws lambda invoke \
-    --function-name tcjam-test-upsertprofilehandler \
-    --payload '{"profileName":">"}' \
-    $resp_body \
-  > /dev/null
-
-  status=$(cat $resp_body | jq .statusCode)
-  assert_equal $status 500
-}
+# 
+# test_profiles_upsert_500() {
+#   printf "test_profiles_upsert_500\n"
+#   resp_body="$(mktemp)"
+#
+#   aws lambda invoke \
+#     --function-name tcjam-test-upsertprofilehandler \
+#     --payload '{"profileName":">"}' \
+#     $resp_body \
+#   > /dev/null
+#
+#   status=$(cat $resp_body | jq .statusCode)
+#   assert_equal $status 500
+# }
