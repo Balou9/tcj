@@ -13,14 +13,14 @@ module.exports.handler = async function (event, context) {
     const payload = await s3.getObject({
       Key: event.profileName
     }).promise()
-
+    console.log("DEBUG:::Payload", payload)
     return {
       statusCode: 200,
       body: JSON.stringify(payload)
     }
   } catch (err) {
     if ( err.code === "NoSuchKey" ) {
-      return { "statusCode": 404 }
+      return { statusCode: 404 }
     }
     return { statusCode: 500 }
   }
