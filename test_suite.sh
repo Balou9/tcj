@@ -41,7 +41,7 @@ test_profiles_upsert_400() {
 # }
 
 test_profiles_read_200() {
-  print "test_profiles_read_200\n"
+  printf "test_profiles_read_200\n"
   resp_body="$(mktemp)"
 
   aws lambda invoke \
