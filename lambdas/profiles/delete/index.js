@@ -9,7 +9,7 @@ module.exports.handler = async function (event, context) {
     if (!event.profileName) {
       return { statusCode: 400 }
     }
-    await s3.delete({
+    await s3.deleteObject({
       Key: event.profileName
     }).promise()
 
