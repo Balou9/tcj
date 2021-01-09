@@ -133,29 +133,29 @@ jobs:
               --zip-file=fileb:///tmp/bundle.zip
           fi
 
-      # - name: deploy the delete profile handler
-      #   run: |
-      #     code_size=$( \
-      #       aws lambda get-function-configuration \
-      #         --function-name=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
-      #         --query=CodeSize \
-      #     )
-      #     if ! git diff HEAD HEAD~1 --exit-code -s "./lambdas/profiles/delete/*" || \
-      #        (( $code_size < 419 ));
-      #     then
-      #       cd ./lambdas/profiles/delete
-      #       npm ci --only=prod
-      #       cd ../../..
-      #       npx @zeit/ncc@0.22.3 build \
-      #         --external=aws-sdk \
-      #         --out=./lambdas/profiles/bundles/delete \
-      #         ./lambdas/profiles/delete/index.js
-      #       zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/delete/index.js
-      #       aws lambda update-function-code \
-      #         --function-name=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
-      #         --publish \
-      #         --zip-file=fileb:///tmp/bundle.zip
-      #     fi
+      - name: deploy the delete profile handler
+        run: |
+          code_size=$( \
+            aws lambda get-function-configuration \
+              --function-name=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
+              --query=CodeSize \
+          )
+          if ! git diff HEAD HEAD~1 --exit-code -s "./lambdas/profiles/delete/*" || \
+             (( $code_size < 419 ));
+          then
+            cd ./lambdas/profiles/delete
+            npm ci --only=prod
+            cd ../../..
+            npx @zeit/ncc@0.22.3 build \
+              --external=aws-sdk \
+              --out=./lambdas/profiles/bundles/delete \
+              ./lambdas/profiles/delete/index.js
+            zip -j /tmp/bundle.zip ./lambdas/profiles/bundles/delete/index.js
+            aws lambda update-function-code \
+              --function-name=${{ env.DELETE_PROFILE_HANDLER_NAME }} \
+              --publish \
+              --zip-file=fileb:///tmp/bundle.zip
+          fi
 
   test:
     runs-on: ubuntu-latest
@@ -192,3 +192,4 @@ jobs:
           test_profiles_read_200
           test_profiles_read_400
           test_profiles_read_404
+          test_profiles_delete_204
