@@ -126,7 +126,7 @@ test_profiles_delete_404() {
 
   aws lambda invoke \
     --function-name tcjam-test-deleteprofilehandler \
-    --payload '{}' \
+    --payload '{"profileName": "Alice"}' \
     $resp_body \
   > /dev/null
 
