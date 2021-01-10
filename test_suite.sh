@@ -94,7 +94,7 @@ test_profiles_delete_204() {
   > /dev/null
 
   upsert_status=$(cat $resp_body_upsert | jq .statusCode)
-  assert_equal $status 204
+  assert_equal $upsert_status 204
 
   aws lambda invoke \
     --function-name tcjam-test-deleteprofilehandler \

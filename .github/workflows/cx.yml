@@ -172,17 +172,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: fetch stack outputs
-        run: |
-
-          api_base_url="$( \
-            aws cloudformation describe-stacks \
-              --stack-name="${{ needs.deploy.outputs._stack_name }}" \
-              --query="Stacks[0].Outputs[?OutputKey=='ApiBaseURL'].OutputValue" \
-              --output=text \
-          )"
-          echo "_BASE_URL=$api_base_url" >> $GITHUB_ENV
-
       - name: api testing
         run: |
           source <(curl -sSf https://raw.githubusercontent.com/chiefbiiko/bashert/v1.0.1/bashert.sh)
