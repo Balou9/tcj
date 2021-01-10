@@ -74,7 +74,7 @@ test_profiles_read_404() {
 
   aws lambda invoke \
     --function-name tcjam-test-readprofilehandler \
-    --payload '{"profileName":"Alice"}' \
+    --payload '{"profileName":"Francis"}' \
     $resp_body \
   > /dev/null
 
