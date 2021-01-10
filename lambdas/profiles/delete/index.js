@@ -15,6 +15,7 @@ module.exports.handler = async function (event, context) {
 
     return { statusCode: 204 }
   } catch (err) {
+    console.log("DEBUG:::ErrCode", err, err.code)
     if (err.code === 'NoSuchKey') {
       return { statusCode: 404 }
     }
