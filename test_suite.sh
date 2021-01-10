@@ -105,3 +105,31 @@ test_profiles_delete_204() {
   status_delete=$(cat $resp_body_delete | jq .statusCode)
   assert_equal $status_delete 204
 }
+
+test_profiles_delete_400() {
+  printf "test_profiles_delete_400\n"
+  resp_body="$(mktemp)"
+
+  aws lambda invoke \
+    --function-name tcjam-test-deleteprofilehandler \
+    --payload '{}' \
+    $resp_body \
+  > /dev/null
+
+  status=$(cat $resp_body | jq .statusCode)
+  assert_equal $status 400
+}
+
+test_profiles_delete_404() {
+  printf "test_profiles_delete_404\n"
+  resp_body="$(mktemp)"
+
+  aws lambda invoke \
+    --function-name tcjam-test-deleteprofilehandler \
+    --payload '{}' \
+    $resp_body \
+  > /dev/null
+
+  status=$(cat $resp_body | jq .statusCode)
+  assert_equal $status 404
+}

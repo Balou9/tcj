@@ -182,3 +182,5 @@ jobs:
           test_profiles_read_400
           test_profiles_read_404
           test_profiles_delete_204
+          test_profiles_delete_400
+          
