@@ -85,6 +85,7 @@ test_profiles_read_404() {
 test_profiles_delete_204() {
   printf "test_profiles_delete_204\n"
   resp_body_upsert="$(mktemp)"
+  resp_body_delete="$(mktemp)"
 
   aws lambda invoke \
     --function-name tcjam-test-upsertprofilehandler \
