@@ -119,17 +119,3 @@ test_profiles_delete_400() {
   status=$(cat $resp_body | jq .statusCode)
   assert_equal $status 400
 }
-
-test_profiles_delete_404() {
-  printf "test_profiles_delete_404\n"
-  resp_body="$(mktemp)"
-
-  aws lambda invoke \
-    --function-name tcjam-test-deleteprofilehandler \
-    --payload '{"profileName": "Alice"}' \
-    $resp_body \
-  > /dev/null
-
-  status=$(cat $resp_body | jq .statusCode)
-  assert_equal $status 404
-}
