@@ -6,13 +6,13 @@ const s3 = new S3({
 
 module.exports.handler = async function (event, context) {
   try {
-    if (!event.profileName) {
+    if (!event.profileName || !event.score) {
       return { statusCode: 400 }
     }
 
     await s3.putObject({
       Key: event.profileName,
-      Body: JSON.stringify({ score: 0 })
+      Body: event.score
     }).promise()
 
     return { statusCode: 204 }
