@@ -89,7 +89,7 @@ test_profiles_delete_204() {
 
   aws lambda invoke \
     --function-name tcjam-test-upsertprofilehandler \
-    --payload '{"profileName":"Alice"}' \
+    --payload '{"profileName":"Alice","score":"0"}' \
     $resp_body_upsert \
   > /dev/null
 
