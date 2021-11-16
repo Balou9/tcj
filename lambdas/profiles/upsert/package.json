@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "aws-sdk": "2.707.0",
+    "aws-sdk": "2.814.0",
     "uuid": "8.3.1"
   }
 }
